@@ -76,6 +76,10 @@ body {
     text-overflow: ellipsis;
 }
 
+input {
+    width: auto;
+}
+
 /****************************************************************** 进度条 - Progress ******************************************************************/
 .dinglj-v-progress-bar {
     --bg: var(--theme-color);
