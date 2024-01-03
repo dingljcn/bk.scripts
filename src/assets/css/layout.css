@@ -196,6 +196,10 @@
     text-overflow: ellipsis;
 }
 
+.dinglj-v-tr * {
+    line-height: 34px;
+}
+
 .dinglj-v-tr .dinglj-v-cell:nth-child(1) {
     border-left: none;
 }
@@ -215,7 +219,6 @@
 
 .dinglj-v-table {
     overflow: hidden;
-    line-height: 34px;
     display: flex;
     flex-direction: column;
 }

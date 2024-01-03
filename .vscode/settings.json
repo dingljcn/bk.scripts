@@ -8,6 +8,8 @@
         "typescript/webpack": true,
         "javascript": true,
         ".gitignore": true,
-        "*.bat": true
+        "*.bat": true,
+        ".github": true,
+        "package-lock.json": true
     }
 }

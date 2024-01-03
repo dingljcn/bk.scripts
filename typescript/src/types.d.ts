@@ -8,6 +8,10 @@ declare global {
         indexOfIgnoreCase(another: T): number,
     }
     interface String {
+        /** 加密自身 */
+        encrypt(): string,
+        /** 解密自身 */
+        decrypt(): string,
         /** 忽略大小写判断字符串是否相等 */
         equalsIgnoreCase(another: string): boolean,
         /** 忽略大小写判断是否有子串 */
@@ -20,6 +24,12 @@ declare global {
         err(): void,
     }
     interface Window {
+        /** 加密 */
+        encrypt(data: any): string,
+        /** 解密 */
+        decrypt(data: any): string,
+        /** rsa 的公钥/私钥 */
+        rsa: { pub: string, pri: string},
         /** 给定一个参照数组, 然后按照此数组进行排序 */
         compareStringByArray(order: Array<string>, list: Array<string>): void,
         /** 给定一个参照数组, 然后按照此数组进行排序 */

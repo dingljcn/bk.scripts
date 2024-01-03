@@ -2,6 +2,7 @@ import { Component, Compute, Field, Method, Mounted } from '../../component';
 import { AbstractComponent, Case, LangItem, Registry } from '../../entity';
 import { filter as xfilter } from './filter';
 import { card as xcard } from './card';
+import { table as xtable } from './table';
 import '../../init';
 
 window.linkCss('/src/script/case-list/index.css');
@@ -20,18 +21,20 @@ window.document.body.innerHTML = `<div id="case-list-dinglj-container">
                     :group-data="groupByStatus(componentName)"
                     :card-cnt="filter.data.cardCnt">
                 </xcard>
+                <xtable v-else
+                    :status-names="statusNames(componentName)"
+                    :group-data="groupByStatus(componentName)">
+                </xtable>
             </i-tab-view>
         </template>
         <template v-slot:after></template>
     </i-nav-view>
 </div>`;
 
-window.defunc('uuid', () => {});
-
 export class App extends AbstractComponent {
 
     @Component({
-        xfilter, xcard
+        xfilter, xcard, xtable
     })
     @Mounted(App, 'App')
     public mounted(): void {

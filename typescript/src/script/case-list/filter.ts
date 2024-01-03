@@ -27,7 +27,7 @@ class Filter extends AbstractComponent {
                 :list="versionNames"
                 @on-change="v => filter.versions = v">
             </i-combo>
-            <div style="flex: 1"></div>
+            <div class="dinglj-v-flex"></div>
             <i-switch pre-text="卡片视图" post-text="表格视图" @on-change="data => filter.mode = (data.value ? 'table' : 'card')">
             </i-switch>
         </div>

@@ -28,6 +28,8 @@
     --padding-tb: 0px;
     /* 左右内边距 */
     --padding-lr: 0px;
+    /* 表格标题色 */
+    --title-color: #263238;
 }
 
 /* 滚动条 */

@@ -1,3 +1,5 @@
+import JsEncrypt from 'jsencrypt'
+
 Array.prototype.includesIgnoreCase = function(another) {
     let target;
     if (typeof another == "object") {
@@ -59,19 +61,16 @@ String.prototype.err = function() {
 }
 
 Element.prototype.animate = function(config, transition) {
-    console.log(config);
     const old_transition = getComputedStyle(this).transition;
     const keys = Object.keys(config);
     for (let key of keys) {
         this.style[key] = config[key][0];
-        console.log(config[key][0])
     }
     setTimeout(() => {
         const target_transition = transition / 1000 + 's';
         this.style.transition = target_transition;
         for (let key of keys) {
             this.style[key] = config[key][1];
-            console.log(config[key][1])
         }
         setTimeout(() => {
             this.style.transition = old_transition;
@@ -90,3 +89,39 @@ Element.prototype.findChildrenByClass = function(clazz) {
     }
     return result;
 };
+
+Window.prototype.encrypt = function(data) {
+    if (this.window.rsa.pri) {
+        const encrypt = new JsEncrypt();
+        encrypt.setPrivateKey(window.rsa.pri);
+        encrypt.setPublicKey(window.rsa.pub);
+        return encrypt.encrypt(data);
+    }
+    return data;
+}
+
+Window.prototype.encrypt = function(data) {
+    if (window.rsa.pub) {
+        const jsencrypt = new JsEncrypt();
+        jsencrypt.setPublicKey(window.rsa.pub);
+        return jsencrypt.encrypt(data);
+    }
+    return data;
+}
+
+Window.prototype.decrypt = function(data) {
+    if (window.rsa.pri) {
+        const jsencrypt = new JsEncrypt();
+        jsencrypt.setPrivateKey(window.rsa.pri);
+        return jsencrypt.decrypt(data);
+    }
+    return data;
+}
+
+String.prototype.encrypt = function() {
+    return window.encrypt(this);
+}
+
+String.prototype.decrypt = function() {
+    return window.decrypt(this);
+}

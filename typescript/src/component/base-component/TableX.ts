@@ -12,26 +12,26 @@ export class TableX<T> extends AbstractComponent {
     @Template
     public template: string = `<div class="dinglj-v-table" :id="vid">
         <div class="dinglj-v-thead dinglj-v-tr">
-            <div class="dinglj-v-cell" :getStyle('') v-if="selectable" class="dinglj-v-table-select" @click="doCheckAll">
+            <div :style="getStyle('')" v-if="selectable" class="dinglj-v-table-select" @click="doCheckAll">
                 <input type="checkbox" :checked="checkAll"/>选择
             </div>
-            <div class="dinglj-v-cell" :getStyle('') v-if="sequanceNum" class="dinglj-v-table-sequence">
+            <div :style="getStyle('')" v-if="sequanceNum" class="dinglj-v-table-sequence">
                 序号
             </div>
-            <div class="dinglj-v-cell" :getStyle(getColumnKey(column)) v-for="column in columns" :class="getClass(column)">
+            <div :style="getStyle(getColumnKey(column))" v-for="column in columns" :class="getClass(column)">
                 {{ getColumnCaption(column) }}
             </div>
         </div>
         <div class="dinglj-v-tbody">
             <div>
                 <div class="dinglj-v-tr" v-for="(line, idx) in data" @click="checkOne(line)">
-                    <div class="dinglj-v-cell" :getStyle('') v-if="selectable" class="dinglj-v-table-select">
+                    <div :style="getStyle('')" v-if="selectable" class="dinglj-v-table-select">
                         <input type="checkbox" :checked="checkedList.includesIgnoreCase(line)"/>
                     </div>
-                    <div class="dinglj-v-cell" :getStyle('') v-if="sequanceNum" class="dinglj-v-table-sequence">
+                    <div :style="getStyle('')" v-if="sequanceNum" class="dinglj-v-table-sequence">
                         {{ idx + 1 }}
                     </div>
-                    <div class="dinglj-v-cell" :getStyle(getColumnKey(column)) :class="getClass(column)" v-for="column in columns">
+                    <div :style="getStyle(getColumnKey(column))" :class="getClass(column)" v-for="column in columns">
                         <div class="dinglj-v-auto-hidden" v-html="getCell(line, getColumnKey(column))"></div>
                     </div>
                 </div>
@@ -48,14 +48,19 @@ export class TableX<T> extends AbstractComponent {
     @Field
     public checkedList: Array<T> = [];
 
+    @Field
+    public bestWidthCache: any = false;
+
     @Method
     public getClass(column: any): object {
         const columnKey = this.getColumnKey(column);
         if (this.cache[columnKey]) {
             return this.cache[columnKey];
         }
-        let flex = this.flexColumns.includesIgnoreCase(columnKey) ? 'flex' : 'fixed';
-        const result: any = {};
+        let flex = this.flexColumns.includesIgnoreCase(columnKey) ? 'dinglj-v-flex' : 'fixed';
+        const result: any = {
+            "dinglj-v-cell": true
+        };
         result[columnKey] = true;
         result[flex] = true;
         this.cache[columnKey] = result;
@@ -68,9 +73,11 @@ export class TableX<T> extends AbstractComponent {
         if (text == '') {
             width = 80;
         } else {
-            width = this.bestWidth[text];
+            width = this.getBestWidth()[text];
         }
-        return {}
+        return {
+            width: `${ width }px`,
+        }
     }
 
     @Method
@@ -82,14 +89,18 @@ export class TableX<T> extends AbstractComponent {
         this.checkAll = !this.checkAll;
     }
 
-    @Compute(function(): any {
-        let result: any = {};
+    @Method
+    public getBestWidth(): any {
+        if (this.bestWidthCache) {
+            return this.bestWidthCache;
+        }
+        this.bestWidthCache = {};
         // 一列一列分别计算宽度
         for (let column of this.columns) {
             // 计算本列的标题宽度
             const columnKey = this.getColumnKey(column);
             const columnTitle = this.getColumnCaption(column);
-            let titleWidth = window.calcTxtWidth(columnTitle);
+            let titleWidth = window.calcTxtWidth(`${ columnTitle }`);
             let widthArray = [ titleWidth ];
             // 计算本列的每一行宽度
             widthArray.push(
@@ -99,11 +110,10 @@ export class TableX<T> extends AbstractComponent {
                 })
             );
             const maxWidth = Math.max(...widthArray);
-            result[columnKey] = maxWidth + 30;
+            this.bestWidthCache[columnKey] = maxWidth + 30;
         }
-        return result;
-    })
-    public bestWidth: any;
+        return this.bestWidthCache;
+    }
 
     @Prop(Array<string>, [])
     public flexColumns: Array<string>;

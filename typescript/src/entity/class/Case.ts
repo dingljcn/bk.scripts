@@ -1,5 +1,22 @@
 import { LangItem } from "./LangItem";
 
+const fields = {
+    caseName: '用例名称',
+    status: '状态',
+    component: '模块',
+    ticket: '变更号',
+    currentRow: '当前行数',
+    totalRow: '总行数',
+    dbType: '数据库类型',
+    currentStep: '当前结束的步骤',
+    totalStep: '总步骤',
+    percent: '进度',
+    zip: '打包版本',
+    level: '等级',
+    casePath: '用例路径',
+    timeCost: '耗费时间',
+}
+
 export class Case {
     caseName: string; 
     status: LangItem; 
@@ -15,6 +32,8 @@ export class Case {
     level: number; 
     casePath: string; 
     timeCost: string;
+    static _fieldMap_: any = fields;
+    static _fields_ = Object.keys(fields);
     constructor(origin: any, statusConstant: any) {
         if (!origin) {
             return;

@@ -82,14 +82,12 @@ window.defunc('query', function(selector: string): Array<HTMLElement> {
 
 /** 计算文本宽度 */
 window.defunc(window, 'calcTxtWidth', function(item: string | HTMLElement): number {
-    if (typeof item == 'string') {
-        return window.calcTxtWidth(item, '400', '12px', '微软雅黑');
-    } else {
-        if (!item) {
-            return 0;
-        }
+    if (typeof item == 'object') {
         const computedStyle = window.getComputedStyle(item);
         return window.calcTxtWidth(item.innerText, computedStyle.fontWeight, computedStyle.fontSize, computedStyle.fontFamily);
+    } else {
+        item = item + '';
+        return window.calcTxtWidth(item, '400', '12px', '微软雅黑');
     }
 });
 
