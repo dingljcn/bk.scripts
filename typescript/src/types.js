@@ -113,6 +113,9 @@ Window.prototype.encrypt = function(data) {
 }
 
 Window.prototype.decrypt = function(data) {
+    if (this.window.rsa == undefined) {
+        alert('请更新脚本, 添加 rsa 密钥的配置');
+    }
     if (window.rsa.pri) {
         const jsencrypt = new JsEncrypt();
         jsencrypt.setPrivateKey(window.rsa.pri);
