@@ -91,6 +91,9 @@ Element.prototype.findChildrenByClass = function(clazz) {
 };
 
 Window.prototype.encrypt = function(data) {
+    if (this.window.rsa == undefined) {
+        alert('请更新脚本, 添加 rsa 密钥的配置');
+    }
     if (this.window.rsa.pri) {
         const encrypt = new JsEncrypt();
         encrypt.setPrivateKey(window.rsa.pri);
