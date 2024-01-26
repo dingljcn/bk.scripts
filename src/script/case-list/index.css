@@ -1,5 +1,6 @@
 :root {
     --transition: 0.3s;
+    --font-size: 12px;
 }
 
 body {

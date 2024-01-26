@@ -38,8 +38,6 @@ declare global {
         readData(...params: any): any,
         /** 读取用户配置 */
         readConfig(): any,
-        /** 读取系统默认配置 */
-        defaultConfig(): any,
         /** 判断是不是开发环境 */
         isDev(): boolean,
         /** 重载定义函数, 默认定义在 window.dinglj 上 */
@@ -102,6 +100,10 @@ declare global {
         getConfigOrDefault<T>(config: any, defaultConfig: any, path: string, _default: T): T,
         /** 获取配置, 或从默认配置中取, 默认配置也没有, 则返回默认值 */
         getConfigOrDefault<T>(config: any, defaultConfig: any, path: string, _default: T, merge: boolean): T,
+        /** 获取解密的默认配置 */
+        defaultConfig(): any,
+        /** 获取加密的默认配置 */
+        encodeConfig(): any,
     }
     interface Element {
         /** 元素创建时间 */

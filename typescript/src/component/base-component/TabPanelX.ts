@@ -35,7 +35,7 @@ export class TabPanelX<T> extends AbstractComponent {
     public getClass(item: T): object {
         return {
             'dinglj-v-tabpanel-item': true,
-            'active': this.value == item,
+            'active': JSON.stringify(this.value) == JSON.stringify(item),
         };
     }
 

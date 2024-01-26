@@ -3,6 +3,8 @@
         "case": "webpack --config ./webpack/case-list.config.js"
     },
     "dependencies": {
+        "browser-env": "^3.3.0",
+        "jsencrypt": "^3.3.2",
         "ts-loader": "^9.5.1",
         "typescript": "^5.3.3",
         "webpack-cli": "^5.1.4"

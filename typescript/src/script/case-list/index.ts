@@ -3,6 +3,7 @@ import { AbstractComponent, Case, LangItem, Registry } from '../../entity';
 import { filter as xfilter } from './filter';
 import { card as xcard } from './card';
 import { table as xtable } from './table';
+import './encode-config';
 import '../../init';
 
 window.linkCss('/src/script/case-list/index.css');
@@ -38,8 +39,9 @@ export class App extends AbstractComponent {
     })
     @Mounted(App, 'App')
     public mounted(): void {
+        const _this = this;
         window.displayData = function() {
-            console.log(this);
+            console.log(_this);
         }
     }
 

@@ -13,19 +13,19 @@ class Filter extends AbstractComponent {
     public template: string = `<div id="case-filter">
         <div class="filter-row">
             <i-input caption="搜索" placeholder="请输入关键字"
-                @on-input="data => filter.keyword = data.value">
+                @on-change="data => filter.keyword = data.value">
             </i-input>
             <i-combo caption="状态" placeholder="请选择状态"
                 style="margin-left: 10px"
                 :list="Object.values(status)"
                 :get-value="i => i.en" 
                 :get-caption="i => i.zh"
-                @on-change="s => filter.status = s">
+                @on-change="s => filter.status = s.value">
             </i-combo>
             <i-combo caption="版本" placeholder="默认为当前版本"
                 style="margin-left: 10px; --width: 400px"
                 :list="versionNames"
-                @on-change="v => filter.versions = v">
+                @on-change="v => filter.versions = v.value">
             </i-combo>
             <div class="dinglj-v-flex"></div>
             <i-switch pre-text="卡片视图" post-text="表格视图" @on-change="data => filter.mode = (data.value ? 'table' : 'card')">
@@ -54,6 +54,7 @@ class Filter extends AbstractComponent {
     @Watch('filter')
     public onFilterChange(newVal: any, oldVal: any): void {
         this.emit('on-change', newVal);
+        console.log(newVal);
     }
     
     /** 获取用户配置 */

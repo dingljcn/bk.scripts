@@ -125,3 +125,35 @@ String.prototype.encrypt = function() {
 String.prototype.decrypt = function() {
     return window.decrypt(this);
 }
+
+Window.prototype.defaultConfig = function() {
+    let result = this.window.encodeConfig();
+    return dispatch(result);
+}
+
+function dispatch(obj) {
+    if (typeof obj == 'object') {
+        return resolveObject(obj);
+    } else if (typeof obj == 'string') {
+        return resolveString(obj);
+    }
+}
+
+function resolveObject(obj) {
+    for (let key of Object.keys(obj)) {
+        obj[key] = dispatch(obj[key]);
+    }
+    return obj;
+}
+
+function resolveString(string) {
+    if (string.startsWith('$DINGLJ-ENCODE=')) {
+        string = string.replace('$DINGLJ-ENCODE=', '');
+        let result = '';
+        for (let oneOf of string.split('$DINGLJ-SPLIT-FLAG$')) {
+            result += oneOf.decrypt();
+        }
+        return result;
+    }
+    return string;
+}
