@@ -1,0 +1,67 @@
+window.encodeConfig = function(): any {
+    return {
+        constant: {
+            status: {
+                TICKET: {
+                    en: '$DINGLJ-ENCODE-START$SWDK2DwUBWdGpBsfTImU7d6dUdvqvSuSHaUMWEibE6a6L57aNcwJ0/HrVjZo7a7FtpWJ5hk2txSWHqmNgG4WyTOb6eqkCD6moMCK7noWaC+1t2U4KCN8NDkiTmnRwffI1k/BuuId5Ddt14a2dOmdVHE5qwgD8dCnFv/tLnuasis=$DINGLJ-ENCODE-END$', 
+                    zh: '$DINGLJ-ENCODE-START$E1ynOZ+PTSB7D3kLj4HN1UKJJ/qnuvA0I8plOdCwe0ZmiFvWn7alFWkhg6FdHwXG+ITsERy4WTK9hulaTgkJbh+1OPogxaYd6hy0xkC9xnHgVn8IW35RVdGGycWP1uwFXyxYBaq+B8SBo/jb5e9/ExbMG1Uu8Y0M+vhnpSp6dCw=$DINGLJ-ENCODE-END$'
+                },
+                FAILED: {
+                    en: '$DINGLJ-ENCODE-START$YcwmSNa8HfdRfruXODMHwizzdk1bWIuH0HVxaVPe53GpT2xHviNL4dpLPZQshgxweW/wu2ZgXiJnr6F56fYQXqXWjo7xEPSEtS1vlAu5qCasc+POYN88jgJHBzm/Nwqz6aZmc6u0WmoWTCCKBa/VlrWUheAeZtuQJ05Col+6pTQ=$DINGLJ-ENCODE-END$',
+                    zh: '$DINGLJ-ENCODE-START$V1STI8tZH5nhD467NJfWIcNQvSJglAIShVFbzLbj4pUCUfbgaakryeCY2Z/ObaYNwGmHqo5Ix4WY5jNZg1B3XNT0BZ7hpo68If9THmOaJivr/OSXZ9uu+s3ULb2xfrBYjcbkNQlpOqiCZyMdOq3UdMg94OVrqn1xnspMsifNdg8=$DINGLJ-ENCODE-END$'
+                },
+                SUCCESS: {
+                    en: '$DINGLJ-ENCODE-START$ng3O9IRoz6bWxNMHFtqHaQvM1dyjilWlcWCvjy86zdDgsPElt0cjLBRsJrq5wk9do1JbcXkgEtjcmb+wvNoqvOkHRiVowLRl+DqQ8DK/QAS32xUrN7KXq0TEB/xuv1gu3dZ9Sc6TLxcXr9MmMhRTkTVfTUzYWIIv8El6l0N2gFQ=$DINGLJ-ENCODE-END$',
+                    zh: '$DINGLJ-ENCODE-START$QYqF/OI04akgr9lA1AyPNqFEdetLDNTS+KDVcDlPd4CWDJfJykPVWOtHz/D0n4L27z4vDisKJMTaww39JHkPPhy+ZudKngOXt0pZrMvr3+Dy3HzaOttaJJcWayP5vqT+6DLDj79zhbMRRg9PSD8Q8PrA628Xnj0PsL0We8urNXA=$DINGLJ-ENCODE-END$'
+                },
+                RUNNING: {
+                    en: '$DINGLJ-ENCODE-START$eemimj7E7vgbKL2UE3Jsqd6I8cyGHlX676eCRyHbTF1hS4If4zOq23RW6/jLBnxqVJADqhF7/ec3gqYcR1Pos/om/KGou53qEpGHDHdBt0j4uYcBMqFXw3GaHjhHVYyxV6EKt/xs9ZTKihNpjTy20wd/tFWx+wVuqp68Qk4G0FI=$DINGLJ-ENCODE-END$',
+                    zh: '$DINGLJ-ENCODE-START$W+OnWfVHX5FRjd7Bzqhnn2kaJ/rhK/XOH+0j6RMX9Li1mf8BMpIL+zMUDxeBxh+CNxLI0tWNpNDQ2h6NIpx+VcEWEVOCErm1iNcKODaLBm4khHLh1U1Iq1HJvh9vY3j00JHrPAyEGfQ87Ln2vuAJLmEdG59ec4/7LKQZ49Fm+9M=$DINGLJ-ENCODE-END$'
+                },
+                SENDED: {
+                    en: '$DINGLJ-ENCODE-START$bR7qOSAjw+Kh2iJElIgaj2lV4Ev/j1TldkEIbyYwLumCRLa7lD9jWNIdPSsje1mKnNk7KYfRVLOqG+kCcT8gN0gqt1hrwCuaK8sshjBhbR2NXcYAfbguTyBfa5EB5VXLXO/i52TK6sylrULvWetZcKfRSRVZMByYKqv9typCxtA=$DINGLJ-ENCODE-END$',
+                    zh: '$DINGLJ-ENCODE-START$c9XRDY+IXP0+TR9MyfinkN8ryv4hW4cRjMDRJhGwtgcQqn3SGMX1rGi5YfvjN/L5Br5CDfKvSbOI6MUXHFoBfL8pZDCFLuWJKSO3QdJuMRGko9nQOAqfroYQYBR8PX4p0vFmm3MrWgg59QNPK9XM+/37GcAbJ6NyuSYc1N2hTCw=$DINGLJ-ENCODE-END$'
+                },
+                NOTSEND: {
+                    en: '$DINGLJ-ENCODE-START$eGAdYFHx0T521gfy92DhZYQofc2zDDAlMXu8aw5/AsGZAp8PTQky8i4wv0MqTJ1cKTtXbJyhEGqMnXsPb16Qw7r6x+QME+NYdmHK4DWug7pqlYQ+SBVogMxeBUx2xeifXzI487abj+8oTJvyWsMQNuf0GCwAlB0TjPrC0oGqbAk=$DINGLJ-ENCODE-END$',
+                    zh: '$DINGLJ-ENCODE-START$mbJ/AV1OnBNUvsFBoXkIjv2o4n414lFn3y4a0cUasyVhfuIAhlDirPzvcBbNgTsh+/5extVaijgIa/QandFULalefX2+fw67wIwWlDkAFZxv0F6ICmdFYR6OnlKM6aDNzwPH4w6MjxQDDtRp20cJkKu6V+C1WJ/pwtQoeq86O70=$DINGLJ-ENCODE-END$'
+                },
+                WAITTING: {
+                    en: '$DINGLJ-ENCODE-START$GH7B9Lm3faslgKGEmvksIkXyLlTx3WjlsZvLATzRe+DA8KefzG4nes4MMBjIqC2UZRQLMEkFRtYjworZTYsnqyuJoxk7+XkQyaSumxJne1L9X5X/occznR1bZ8pV32771CG/q5FmtoNbkXKe/0f+jUwylU4lCfxQtIWPm5C4Sno=$DINGLJ-ENCODE-END$',
+                    zh: '$DINGLJ-ENCODE-START$FsF6SW79MtDRCQLcAFemaXJwN/nFa5525JCvwgQ0T6P1pSiwf+MBXYz/83wGYw9xn/0b2u1XnuI3EDFtQuk18adp/N1X8urgFaHdqG9/ykE3AS/6K7KmUcJgt7jQxYt0+5omrFuXdJCfTK1g8kJgRlhoJVk5JJNTb7B43Ig6fr8=$DINGLJ-ENCODE-END$'
+                },
+            }
+        },
+        datasource: {
+            mysql: {
+                DB_SERVER: '$DINGLJ-ENCODE-START$ScT2wurV227zvmKUepqjsIblZI+NIR+Q7UwsWDKuFdcyZj4DuSIjnj0QT4Bozm6m705P2YNKQcAkIc5UAU+NBZfBeN7RYOBLoLwz3MnoSSsQr1NRPJWpxmgis2Ud+giDLA0zizi/Bolo0c8ex0fSRZDyOCHqfGoqjzbs0WKxbF8=$DINGLJ-ENCODE-END$',
+                DB_PASS: '$DINGLJ-ENCODE-START$GJVy1zgR7N7Pkp/tmoIXcd8AxUfT+pg8dLIa4efltMmI6uI26JwMDCqnqiTtpdsaOCZ7L5WgkNy3tWRNcZDJ0EFJdFXV84SBCMAWNFcmbALSlrHvvJrU10BBS66ifcfH398/fdQV6gz99PwS7gRdbntxjRMPPrGvbPVdn0xhuMw=$DINGLJ-ENCODE-END$',
+                DB_TYPE: '$DINGLJ-ENCODE-START$N5J5aQlKJzwO18nY+iPac7lrKRABo1fOgN5kXKEfcKq7Fe0v9bHAc5eLRoqvTgboojTrt5IqLktnxRvZnqFTU0BRokPQYGBQPlbzYDLyNWsRMdtGjbVsml0pfglkyUYj+qelor+Ilz+62OIjtC07JkEs+J83fv9O7uehCDKhzUs=$DINGLJ-ENCODE-END$',
+                DB_USER: '$DINGLJ-ENCODE-START$dJbs2D207kWcNHVeBkgKHSx+U2wZNltSgDnQ0RUHa3MCr4Z5CQVfSYGE7YmRvBCyrVivItQxCmt5DB5L+7MTyjRXx9ES8Gq2oLBAuN6jiFBLj8WshkS29eMvLv0/csCid7GU0FEU+HZ+Sa7dWR3GlQnRfTHUWLJ1dIKY6dx1was=$DINGLJ-ENCODE-END$',
+                DB_NAME: '$DINGLJ-ENCODE-START$aGCp0kJbug0Efi3VyKJQACPTn+bg6DEs+6ZeTyLlQf3VzMczIY6O7ddyEiZER/sECssGbrseO6pWocMx2YinkP+I752wYaWU8AiG5aqV8izr7aaCXTOcO6nokPvvLmMVJ+MPoiWme6SwoCfLx6GkNKuc3Z3K1AwlxElSAJgY5Dk=$DINGLJ-ENCODE-END$'
+            },
+            mssql: {
+                DB_SERVER: '$DINGLJ-ENCODE-START$jrtb66A5zaPkIHvcmfZJSsR+ZuK0b6mXUWJbSrSx6ac6JEICn2aIUX+M06rMRZOSJd3DykBFZK2bcfx/XHX+/Nm9S0cKu0Cv6AwxMsDi9nl8PThDtMa+iCSpu9teDdJuCwZpV/5h36+8MWiwnxbmgLK/t9hmcluQv5rdJL3hYc4=$DINGLJ-ENCODE-END$',
+                DB_PASS: '$DINGLJ-ENCODE-START$kyd0tZL+6DO9qHAyZ2LvNjCulRmLU9FPQCWTcz2dnyYjAx5nuaSV68+2eNFhGMbX9eNT/CwfwpN0b1I3EkmRhigCZD/3j3PwNljTAfqMTi6Q1xdMfcpxFo7p2aGcts5ukAQDFnjDkQwRbtSQnHOg6SEygUyggR16TNUQeEa1qFY=$DINGLJ-ENCODE-END$',
+                DB_TYPE: '$DINGLJ-ENCODE-START$bp/4SXCp3IjRl96kdK9QcnQFJE0jvkcehW9I5s44p94MAplwDof3jkf/+ufeJ/VqL5N6PBAJH3z8g+yGOYb5Pbe8z6omIQ36Mw2YT7MV/gXXX0yfhyer6RMPORf2NWHuIRdDMGFmRZp4iGWMQu0wUJIzVXFj2yuYHE+q596bAFY=$DINGLJ-ENCODE-END$',
+                DB_USER: '$DINGLJ-ENCODE-START$c3lTAvKUGHIsxRmGYbg5F2qCJDX2gI7QHXeo2kNaZVLftGVHK4XXa0e5wKbZEHDagT5reo+K/vvw12RwUPMteRV/aRVv0uY4rSPOWCyGet00i61tdp8+U6wQvb2K5dD7CuEVGWZDcfE88qQdQ0yssHVj7qHvZraehVFKcXxixP0=$DINGLJ-ENCODE-END$',
+                DB_NAME: '$DINGLJ-ENCODE-START$SDDc6wwLQYPoQ+MD7nTWitznj6lAS1zH64tTVwHakcU7tQtoaLmK9VOVdbxFl1UPviFCQdaFUb+XYyCqYTidB3RNNHJKVHWHIDmKFEVeS+/SdI+W31BZbYrciyNPO+3owakIcAdpB8b3TKbLJ2I0CVkUpprRnzGqvBwJffTKjb8=$DINGLJ-ENCODE-END$'
+            },
+            oracle: {
+                DB_SERVER: '$DINGLJ-ENCODE-START$kP1L/rAqC6lOCmNySmSisUncRmraij9KBlT4sX9n/TCibryrSTa/rvYb9E5x5aVmhsOFqdOHtE/V7MKcVjisKlXi18rqGPy6eSKZdx37/JMHk36k4LNBPOOgKvhSwfgnXgJyQiFFyvzcgdG/vCRqFQmXA+M5hqEGa+ha3nMU7s0=$DINGLJ-ENCODE-END$',
+                DB_PASS: '$DINGLJ-ENCODE-START$f0jLmd24CiiWY/ZGP9gdog/UOuhC/jR9n/VpTSenuUY71SN+RV69SYIljXDdyD5blNu75KLqQk+g0QyxDtJcoklBeq5HAu06+F1fA5Xwe/TQpZxrsRJZAYjzCEao6qGmzMee0ZVmwIUI04cuAKZnHvLVARNYTGfzmfEAjUAVxl8=$DINGLJ-ENCODE-END$',
+                DB_TYPE: '$DINGLJ-ENCODE-START$PkR3Ade8oCYCRgnRc06dkh8fv8TdovhG+Hn5FkoIgtmLm7ROqYXU8xXA+vN9jCwOThtGbGdVS84t/oqXylQMbUQ9+YmpklztmDOJS9/USPLXCEi8iZyA8m/0mSndZr5OLaoEBawxnO6cQcH39ok8dFIqDe3JHfAei8ttDJnGRWo=$DINGLJ-ENCODE-END$',
+                DB_USER: '$DINGLJ-ENCODE-START$WWRHyyBZ2EOWZqL5R8XkuIPTzDc2F/vgAjMfvNlmdORjtiO4a2NwaA6rPb8K0bRQ7h1PWm+Vd+OkN/HtQw8wSWuOgZGiBMV7fb/6DZqMfzlEVytxiKhcXtcaaeXI7BVJ/b8eTeBABbroz6lJdIN/Xl7PtvEE+pTIHz15MrSnvu4=$DINGLJ-ENCODE-END$',
+                DB_NAME: '$DINGLJ-ENCODE-START$F522ygn1YT/VZxYt/sadPpXB50+osFZuMOEdgKsop6bJdh2hfxWBj8IlyR1gvCUkyPMr61hT7etBVwjMLO6xL0pwT2v61dB6zMT6tBS8N2UoI81lXSG7p5HADv32ZBtxk6qTSUMvHjvPF5jBApt7q9D8a9KyvuC7trI2cmltdKQ=$DINGLJ-ENCODE-END$'
+            },
+        },
+        author: 'dingljcn'
+    }
+}
+
+if (!window.readConfig) {
+    window.readConfig = function() {
+        return {};
+    }
+}
+    

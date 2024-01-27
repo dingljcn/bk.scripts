@@ -9,5 +9,6 @@
         "moduleResolution": "node",
         "experimentalDecorators": true,
         "sourceMap": true,
+        "baseUrl": "src",
     }
   }

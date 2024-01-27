@@ -2,7 +2,7 @@ const path = require('path');
 const resolve = dir => path.resolve(__dirname, dir);
 
 module.exports = {
-    entry: './src/dev/script/case-list/index.ts',
+    entry: './src/dev/script/ticket-image-viewer/index.ts',
     devtool: 'inline-source-map',
     module: {
         rules: [
@@ -22,6 +22,6 @@ module.exports = {
     },
     output: {
         filename: 'index.compile.min.js',
-        path: path.resolve(__dirname, '../../src/script/case-list'),
+        path: path.resolve(__dirname, '../../src/script/ticket-image-viewer'),
     },
 };
