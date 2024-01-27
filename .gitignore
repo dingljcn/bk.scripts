@@ -3,3 +3,4 @@ src/script/ticket-image-viewer/read-config.js
 src/script/ticket-list/read-config.js
 src/script/wiki/read-config.js
 typescript/to-encrypt
+release.bat

@@ -33,7 +33,6 @@ String.prototype.decrypt = function(privateKey: string = (() => {
     let flag1 = this.startsWith(RsaConst.flag_start);
     let flag2 = this.endsWith(RsaConst.flag_end);
     if (flag1 != flag2) {
-        `加密配置错误: ${ this }`.err();
         return this;
     }
     if (flag1) {

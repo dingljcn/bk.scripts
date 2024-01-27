@@ -1,11 +1,11 @@
 
 
 window.defunc('imgUrl', function(relativePath: string): string {
-    return window.mergePath(window.dinglj_home, relativePath);
+    return window.mergePath(window.dinglj_home.decrypt(), relativePath);
 });
 
 window.defunc('mergePath', function(relativePath: string): string {
-    return window.mergePath(window.dinglj_home, relativePath);
+    return window.mergePath(window.dinglj_home.decrypt(), relativePath);
 });
 
 window.defunc('mergePath', function(parentPath: string, relativePath: string): string {

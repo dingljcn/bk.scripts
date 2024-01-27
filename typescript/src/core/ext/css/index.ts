@@ -1,7 +1,7 @@
 
 
 window.defunc('linkCss', function(relativePath: string): void {
-    window.linkCss(window.dinglj_home, relativePath);
+    window.linkCss(window.dinglj_home.decrypt(), relativePath);
 });
 
 window.defunc('linkCss', function(parentPath: string, relativePath: string): void {

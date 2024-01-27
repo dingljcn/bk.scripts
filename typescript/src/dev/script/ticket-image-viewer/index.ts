@@ -1,5 +1,5 @@
-import { AbstractComponent, Mounted, Field, Method, Compute, Registry, Component, EmitPara, RightMenu } from 'core';
 import './encode-config';
+import { AbstractComponent, Mounted, Field, Method, Compute, Registry, Component, EmitPara, RightMenu } from 'core';
 import { ivline } from './line';
 import { ivstep } from './step';
 import { ivhistory } from './history';
