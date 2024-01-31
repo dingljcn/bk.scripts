@@ -10,8 +10,9 @@
     flex: 1;
     border: 5px;
     border-radius: var(--radius);
-    overflow: hidden;
     box-shadow: var(--shadow);
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 .dinglj-v-navigator-item {
@@ -185,6 +186,7 @@
 
 .dinglj-v-tr {
     display: flex;
+    font-family: 'Microsoft YaHei';
 }
 
 .dinglj-v-tr .dinglj-v-cell {
