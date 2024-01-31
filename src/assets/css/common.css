@@ -61,6 +61,8 @@ body {
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    margin: 0;
+    padding: 0;
 }
 
 /* 辅助样式, 添加后直接拥有 flex: 1 的属性 */
