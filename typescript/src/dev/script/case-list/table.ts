@@ -1,39 +1,42 @@
-import { AbstractComponent, Mounted, Template, Method, EmitPara, LangItem, Compute, Prop, Registry } from "core";
-import { Case } from "dev/entity";
+import { AbstractComponent, LangItem } from "core";
+import { Case } from "dev";
 
-class TableMode extends AbstractComponent {
-
-    @Mounted(TableMode, 'CL-Table')
-    public mounted(): void {
-        this.vid = window.uuid(this.name);
-        this.emit('mounted', this.vid);
-    }
+@Service(TableMode, 'AppTable', true)
+class TableMode extends AbstractComponent<AppTableProps> {
 
     @Template
     public template: string = `<div class="mode-container table">
-        <i-table v-for="statusName in statusNames" class="every-tab" @mounted="onTableMounted" 
-                :columns="getColumnsToDisplay(statusName)"  
-                :data="groupData[statusName]"
-                :get-column-key="col => col.en"
-                :get-column-caption="col => col.zh"
-                :flex-columns="['caseName']">
-        </i-table>
+        <i-table v-for="statusName in statusNames" class="every-tab" :i-props="tableProps(statusName)"></i-table>
     </div>`;
 
-    @Method
-    public onTableMounted(para: EmitPara): void {
-        const list = window.query(`#${ para.vid } .dinglj-v-tbody .dinglj-v-cell.ticket`);
-        list.forEach((i: HTMLElement) => {
-            const text = i.innerText.trim();
-            if (text) {
-                i.innerHTML = `<div onclick="window.open('${ window.getConfigOrDefault(this.config, this.defaultConfig, 'urls.ticket', '', false) }/${ text }', '#${ text }')">#${ text }</div>`;
+    @Method public tableProps(statusName: string): TableProps<Case, LangItem> {
+        const self: TableMode = this;
+        return {
+            list: this.groupData[statusName],
+            columns: this.getColumnsToDisplay(statusName),
+            flexColumns: ['caseName'],
+            getColumnKey: item => item.en,
+            getColumnLabel: item => item.zh,
+            getCell: (item, column) => {
+                if (column instanceof LangItem) {
+                    return $get(item, column.en);
+                }
+                return $get(item, column);
+            },
+            loaded: para => {
+                const list = window.query(`#${ para.vid } .dinglj-v-tbody .dinglj-v-cell.ticket`);
+                list.forEach((i: HTMLElement) => {
+                    const text = i.innerText.trim();
+                    if (text) {
+                        i.innerHTML = `<div onclick="window.open('${ window.getConfigOrDefault(self.config, self.defaultConfig, 'urls.ticket', '', false) }/${ text }', '#${ text }')">#${ text }</div>`;
+                    }
+                })
             }
-        })
-    }
+        }
+    };
 
     /** 计算某模块, 某状态下有哪些列要显示 */
-    @Method
-    public getColumnsToDisplay(statusName: string): Array<LangItem> {
+    @Method public getColumnsToDisplay(statusName: string): Array<LangItem> {
         if (!this.groupData || !this.groupData[statusName] || !this.groupData[statusName].length) {
             return [];
         }
@@ -56,22 +59,18 @@ class TableMode extends AbstractComponent {
         return result;
     }
 
-    @Compute(function(): any {
-        return window.readConfig();
-    })
+    @Compute(window.readConfig)
     public config: any;
 
-    @Compute(function(): any {
-        return window.defaultConfig();
-    })
+    @Compute(window.defaultConfig)
     public defaultConfig: any;
 
-    @Prop(Object, {})
+    @Compute((self: TableMode) => self.iProps.groupData || {})
     public groupData: any;
 
-    @Prop(Array, [])
+    @Compute((self: TableMode) => self.iProps.statusNames || [])
     public statusNames: Array<string>;
 
 }
 
-export const table = Registry.getComponent('CL-Table').build();
+export default $registry.buildComponent('AppTable');

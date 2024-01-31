@@ -1,13 +1,9 @@
-import { AbstractComponent, Compute, Field, Method, Mounted, Prop, Registry, Template } from "core";
-import NavType from "./NavType";
-import { $tool } from "./tool";
+import { AbstractComponent } from "core";
 
-export class TIV_Line extends AbstractComponent {
+@Service(AppLine, 'AppLine')
+export class AppLine extends AbstractComponent<any> {
     
-    @Mounted(TIV_Line, 'iv-line')
-    public mounted(): void {
-        this.vid = window.uuid(this.name);
-        this.emit('mounted', this.vid);
+    @Mounted public mounted(): void {
         // 周期性检查行是否加载完成
         window.timer(() => {
             if (this.lines.length > 0) {
@@ -17,19 +13,19 @@ export class TIV_Line extends AbstractComponent {
             return false;
         });
         /** 方向键绑定 */
-        window.$queue.on('update-line', (data: ScrollProp) => {
+        $queue.on('update-line', (data: ScrollProp) => {
             this.doScroll(data);
         });
         /** 上一行 */
-        window.$queue.on('toPrevLine', () => {
+        $queue.on('toPrevLine', () => {
             this.setIdx(this.current - 1, true, true);
         });
         /** 下一行 */
-        window.$queue.on('toNextLine', () => {
+        $queue.on('toNextLine', () => {
             this.setIdx(this.current + 1, true, false);
         });
         /** 跳转到指定行 */
-        window.$queue.on('jumpToLine', (lineNumber: string) => {
+        $queue.on('jumpToLine', (lineNumber: string) => {
             let idx = this.lines.indexOf(lineNumber);
             if (idx != -1) {
                 this.setIdx(idx);
@@ -38,22 +34,36 @@ export class TIV_Line extends AbstractComponent {
     }
 
     @Template
-    public template: string = `<div id="line-container">
-        <div :class="{ 'line': true, 'arrow': true, 'active': arrow == 'line' }">
-            <div :title="lineNumber" :class="{ 'line-number': true, 'active': current == idx, 'last': last == idx }" v-for="(lineNumber, idx) of lines" @click="setIdx(idx)">
+    public template: string = `<div id="line-container">{{arrow}}
+        <div :class="containerClass">
+            <div :title="lineNumber" :class="itemClass(idx)" v-for="(lineNumber, idx) of lines" @click="setIdx(idx)">
                 {{ lineNumber }}
             </div>
         </div>
     </div>`;
 
-    @Field
-    public current: number = -1;
+    @Compute((self: AppLine) => {
+        return {
+            line: true,
+            arrow: true,
+            active: self.arrow == 'Line',
+        }
+    })
+    public containerClass: any;
 
-    @Field
-    public last: number = -1;
+    @Method itemClass(idx: number) {
+        return {
+            'line-number': true,
+            'active': this.current == idx,
+            'last': this.last == idx
+        }
+    }
 
-    @Method
-    public setIdx(i: number, toStep = false, toLastStep = false): void {
+    @Field public current: number = -1;
+
+    @Field public last: number = -1;
+
+    @Method public setIdx(i: number, toStep = false, toLastStep = false): void {
         const lineContainer = window.byClass('line arrow')[0];
         if (lineContainer) {
             const limit = $tool.getLimit(lineContainer);
@@ -69,8 +79,7 @@ export class TIV_Line extends AbstractComponent {
         }
     }
 
-    @Method
-    public doScroll(prop: ScrollProp): void {
+    @Method public doScroll(prop: ScrollProp): void {
         const next = prop.current + prop.direction;
         if (next < 0) {
             '已经到第一行了'.info();
@@ -84,15 +93,15 @@ export class TIV_Line extends AbstractComponent {
         window.byId('line-container').scrollTo(0, prop.height * prop.qty);
         this.last = this.current;
         this.current = next;
-        window.$queue.sendMsg('line-changed', {
+        $queue.sendMsg('line-changed', {
             line: this.lines[next],
             expect: !!prop.toLastStep ? -1 : 0,
             toStep: !!prop.toStep
         });
-        window.$queue.sendMsg('change-active-panel', NavType.Line);
+        $queue.sendMsg<NavType>('change-active-panel', 'Line');
     }
 
-    @Compute(function() {
+    @Compute((self: AppLine) => {
         const readLineRegExp = /.*<a href="([0-9]+\/)".*/;
         if (window.readLines) {
             return window.readLines();
@@ -105,9 +114,9 @@ export class TIV_Line extends AbstractComponent {
     })
     public lines: Array<string>;
 
-    @Prop(String, NavType.Step, true)
+    @Prop(String, 'Step', true)
     public arrow: NavType;
 
 }
 
-export const ivline = Registry.getComponent('iv-line').build();
+export default $registry.buildComponent('AppLine');

@@ -1,8 +1,6 @@
 import JsEncrypt from 'jsencrypt';
 
-if (window.$rsa == undefined) {
-    window.$rsa = {};
-}
+window.$rsa = {};
 
 window.$rsa.encrypt = function(data, publicKey = (() => {
     if (window.rsa == undefined) {
@@ -50,6 +48,8 @@ function dispatch(obj, privateKey) {
         return resolveObject(obj, privateKey);
     } else if (typeof obj == 'string') {
         return obj.decrypt(privateKey);
+    } else {
+        return obj;
     }
 }
 

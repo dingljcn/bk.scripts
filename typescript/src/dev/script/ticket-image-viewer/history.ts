@@ -1,41 +1,33 @@
-import { AbstractComponent, Compute, Field, Method, Mounted, Prop, Registry, Template, Watch } from "core";
-import NavType from "./NavType";
-import { $tool } from "./tool";
+import { AbstractComponent } from "core";
 
-export class TIV_History extends AbstractComponent {
+@Service(AppHistory, 'AppHistory')
+export class AppHistory extends AbstractComponent<any> {
     
-    @Mounted(TIV_History, 'iv-history')
-    public mounted(): void {
-        this.vid = window.uuid(this.name);
-        this.emit('mounted', this.vid);
+    @Mounted public mounted(): void {
         /** 快捷键: 上/下一个 */
-        window.$queue.on('update-history', (prop: ScrollProp) => {
+        $queue.on('update-history', (prop: ScrollProp) => {
             this.doScroll(prop);
         });
     }
 
     @Template
-    public template: string = `<div id="history-container" class="right-panel" @click="changePanel">
-        <div :class="{ 'history': true, 'arrow': true, 'active': arrow == 'history' }">
-            <div :title="historyNumber" :class="{ 'history-number': true, 'active': current == idx, 'last': last == idx }" v-for="(historyNumber, idx) of list" @click="setIdx(idx)">
+    public template: string = `<div id="history-container" class="right-panel" @click="changePanel">{{arrow}}
+        <div :class="containerClass">
+            <div :title="historyNumber" :class="itemClass(idx)" v-for="(historyNumber, idx) of list" @click="setIdx(idx)">
                 {{ historyNumber.substring(2).replace(/\.png/, '') }}
             </div>
         </div>
     </div>`;
 
-    @Field
-    public current: number = -1;
+    @Field public current: number = -1;
 
-    @Field
-    public last: number = -1;
+    @Field public last: number = -1;
 
     /** 点击时切换到 history 面板 */
-    @Method
-    public changePanel(): void {
-        window.$queue.sendMsg('change-active-panel', 'history');
+    @Method public changePanel(): void {
+        $queue.sendMsg<NavType>('change-active-panel', 'History');
     }
-    @Method
-    public setIdx(i: number): void {
+    @Method public setIdx(i: number): void {
         const historyContainer = window.byClass('history arrow')[0];
         if (historyContainer) {
             const limit = $tool.getLimit(historyContainer);
@@ -49,8 +41,24 @@ export class TIV_History extends AbstractComponent {
         }
     }
 
-    @Method
-    doScroll(prop: ScrollProp) {
+    @Compute((self: AppHistory) => {
+        return {
+            history: true,
+            arrow: true,
+            active: self.arrow == 'History',
+        }
+    })
+    public containerClass: any;
+
+    @Method itemClass(idx: number) {
+        return {
+            'history-number': true,
+            'active': this.current == idx,
+            'last': this.last == idx
+        }
+    }
+
+    @Method doScroll(prop: ScrollProp) {
         const next = prop.current + prop.direction;
         if (next < 0) {
             '已经是第一张'.info();
@@ -64,14 +72,14 @@ export class TIV_History extends AbstractComponent {
         window.byId('history-container').scrollTo(0, prop.height * prop.qty);
         this.last = this.current;
         this.current = next;
-        window.$queue.sendMsg('tab-view:to', this.tabPanelId, '当前图片')
-        window.$queue.sendMsg('change-img', this.list[next]);
+        $queue.sendMsg('tab-view:to', this.tabPanelId, '当前图片')
+        $queue.sendMsg('change-img', this.list[next]);
     }
 
     @Prop(Array<string>, [], true)
     public list: Array<string>;
 
-    @Prop(String, NavType.Step, true)
+    @Prop(String, 'Step', true)
     public arrow: NavType;
 
     @Prop(String, '')
@@ -80,11 +88,11 @@ export class TIV_History extends AbstractComponent {
     @Watch('arrow')
     public onArrowChange(newVal: NavType) {
         /** 初始的 history 面板是没有选项的, 当第一次激活 history 面板才有 */
-        if ('history' == this.arrow && this.current == -1 && this.last == -1 && this.list.length > 0) {
+        if (this.arrow == 'History' && this.current == -1 && this.last == -1 && this.list.length > 0) {
             this.setIdx(0);
         }
     }
 
 }
 
-export const ivhistory = Registry.getComponent('iv-history').build();
+export default $registry.buildComponent('AppHistory');

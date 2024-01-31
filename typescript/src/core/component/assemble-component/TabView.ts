@@ -1,58 +1,72 @@
-import { AbstractComponent, ComponentType, EmitPara } from "core/entity";
-import { Compute, Field, Method, Mounted, Prop, Template } from "..";
+import { AbstractComponent, ComponentType } from "core";
 
-export class TabView<T> extends AbstractComponent {
+@Service(TabView, ComponentType.TabView, true)
+export default class TabView<T> extends AbstractComponent<TabViewProps<T>> {
 
-    @Mounted(TabView, ComponentType.TabView)
-    public mounted(): void {
-        this.vid = window.uuid(this.name);
-        this.emit('mounted', this.vid);
-        window.$queue.on('tab-view:next', () => {
-            window.$queue.sendMsg('tab-panel:next', null, this.tabPanelId);
+    @Mounted public mounted(): void {
+        $queue.on('tab-view:next', () => {
+            $queue.sendMsg('tab-panel:next', null, this.tabPanelId);
         }, this.vid);
         /** 指定 Tab 页事件 */
-        window.$queue.on('tab-view:to', (to: any) => {
-            window.$queue.sendMsg('tab-panel:to', to, this.tabPanelId);
+        $queue.on('tab-view:to', (to: any) => {
+            $queue.sendMsg('tab-panel:to', to, this.tabPanelId);
         }, this.vid);
     }
 
-    @Template
-    public template: string = `<div class="dinglj-v-tab-panel-view" :id="vid">
-        <i-tab-panel :list="list" :get-caption="getCaption" @on-change="changed" @mounted="tabPanelLoaded">
-            <i-scroller-x :index="index" :size="list.length">
+    @Template public template: string = `<div class="dinglj-v-tab-panel-view" :id="vid">
+        <!-- TabView 总容器 -->
+        <i-tab-panel :i-props="tabPanelProps" @mounted="tabPanelLoaded">
+            <!-- TabView 内容 -->
+            <i-scroller-x :i-props="scrollxProps">
                 <slot></slot>
             </i-scroller-x>
         </i-tab-panel>
     </div>`;
 
-    @Field
-    public value: T = null;
+    @Compute((self: TabView<T>): ScrollXProps => {
+        return {
+            size: self.list.length,
+            index: self.index,
+        }
+    })
+    public scrollxProps: ScrollXProps;
 
-    @Field
-    public tabPanelId: string = '';
+    @Compute((self: TabView<T>): TabPanelProps<T> => {
+        return {
+            list: self.list,
+            getLabel: self.iProps.getLabel,
+            onChange: function(args: EmitArgs<T>): void {
+                if (self.value != args.value) {
+                    self.value = args.value;
+                    self.iProps.onChange && self.iProps.onChange({
+                        vid: self.vid,
+                        value: args.value,
+                    })
+                }
+            }
+        }
+    })
+    public tabPanelProps: TabPanelProps<T>;
 
-    @Method
-    public tabPanelLoaded(param: EmitPara): void {
+    @Field public value: T = null;
+
+    @Field public tabPanelId: string = '';
+
+    @Method public tabPanelLoaded(param: EmitArgs<any>): void {
         this.tabPanelId = param.value;
     }
 
-    @Method
-    public changed(param: EmitPara) {
-        if (this.value != param.value) {
-            this.value = param.value;
-            this.emit('on-change', param);
-        }
-    }
-
-    @Compute(function(): number {
-        return this.list.indexOfIgnoreCase(this.value);
-    })
+    @Compute((self: TabView<T>) => self.list.indexOfIgnoreCase(self.value))
     public index: number;
 
-    @Prop(Array<T>, [], true)
+    @Compute((self: TabView<T>) => self.iProps.list || [])
     public list: Array<T>;
-
-    @Prop(Function, (item: T): any => item)
-    public getCaption: Function;
     
 }
+
+declare global {
+    /** Tab 页视图相关参数 */
+    type TabViewProps<T> = TabPanelProps<T>
+}
+
+$registry.buildAndRegist(ComponentType.TabView);

@@ -4,6 +4,7 @@ declare global {
         byId(id: string): HTMLElement,
         /** 根据 class 获取元素 */
         byClass(classes: string): Array<HTMLElement>,
+        byClass(classes: string, document: Document): Array<HTMLElement>,
         /** 根据选择器获取元素 */
         query(selector: string): Array<HTMLElement>,
         /** 计算文字宽度 */
@@ -22,6 +23,8 @@ declare global {
         animate(config: any, transition: number): void,
         /** 根据 class 查找子元素集合 */
         findChildrenByClass(clazz: string): Array<HTMLElement>
+        /** 根据 class 查找兄弟元素集合 */
+        findBroByClass(clazz: string): Array<HTMLElement>
     }
 }
 

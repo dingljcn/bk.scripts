@@ -100,36 +100,11 @@ body {
     background: rgb(251, 128, 56);
 }
 
-.modal-ticket-id {
+.ticket-modal-id {
     cursor: pointer;
     color: var(--theme-color);
     display: inline-block;
     margin-right: 5px;
-}
-
-.modal-ticket-line {
-    display: flex;
-}
-
-.modal-ticket-item {
-    flex: 1;
-}
-
-.modal-ticket-item.key {
-    color: grey;
-}
-
-.modal-ticket-item.value {
-    font-weight: bold;
-}
-
-.modal-ticket-item.value.null {
-    color: rgb(200,200,200);
-}
-
-
-.dinglj-modal-content {
-    overflow: hidden;
 }
 
 .dinglj-v-input.textarea {

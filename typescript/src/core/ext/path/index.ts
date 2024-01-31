@@ -1,14 +1,15 @@
+declare global {
+    interface Window {
+        /** 拼接路径 */
+        mergePath(relativePath: string): string,
+        mergePath(relativePath: string, parentPath: string): string,
+    }
 
+}
 
-window.defunc('imgUrl', function(relativePath: string): string {
-    return window.mergePath(window.dinglj_home.decrypt(), relativePath);
-});
+export {}
 
-window.defunc('mergePath', function(relativePath: string): string {
-    return window.mergePath(window.dinglj_home.decrypt(), relativePath);
-});
-
-window.defunc('mergePath', function(parentPath: string, relativePath: string): string {
+Window.prototype.mergePath = function(relativePath: string, parentPath: string = window.dinglj_home.decrypt()): string {
     if (!parentPath.endsWith('/') && !parentPath.endsWith('\\')) {
         parentPath = parentPath + '/';
     }
@@ -16,4 +17,4 @@ window.defunc('mergePath', function(parentPath: string, relativePath: string): s
         relativePath = relativePath.substring(1);
     }
     return `${ parentPath }${ relativePath }`;
-});
+}

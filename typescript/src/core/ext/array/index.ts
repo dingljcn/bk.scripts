@@ -1,5 +1,3 @@
-
-
 Array.prototype.includesIgnoreCase = function(another) {
     let target;
     if (typeof another == "object") {
@@ -55,4 +53,14 @@ Array.prototype.remove = function(element) {
     }
     this.splice(idx, 1);
     return true;
+}
+
+Array.prototype.getIfExist = function(key: string, expectValue: any) {
+    let result = [];
+    for (let item of this) {
+        if ($get(item, key) == expectValue) {
+            result.push(item);
+        }
+    }
+    return result;
 }

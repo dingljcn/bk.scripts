@@ -1,32 +1,26 @@
-import { AbstractComponent, ComponentType } from "core/entity";
-import { Field, Method, Mounted, Prop, Template } from "..";
+import { AbstractComponent, ComponentType } from "core";
 
-export class SwitchX extends AbstractComponent {
+@Service(SwitchX, ComponentType.SwitchX, true)
+export default class SwitchX extends AbstractComponent<SwitchProps> {
 
-    @Mounted(SwitchX, ComponentType.SwitchX)
-    public mounted(): void {
-        this.vid = window.uuid(this.name);
-        this.emit('mounted', this.vid);
-    }
-
-    @Template
-    public template: string = `<div class="dinglj-v-switch" @click="onclicked" :style="getStyle()">
+    @Template public template: string = `<div class="dinglj-v-switch" @click="onclicked" :style="getStyle()">
+        <!-- 开关按钮前的文字 -->
         <div class="dinglj-v-switch-pre">
             {{ preText }}
         </div>
+        <!-- 开关按钮 -->
         <div :class="getClass()">
             <div></div>
         </div>
+        <!-- 开关按钮后的文字 -->
         <div class="dinglj-v-switch-post">
             {{ postText }}
         </div>
     </div>`;
 
-    @Field
-    public active: boolean = false;
+    @Field public active: boolean = false;
 
-    @Method
-    public getStyle(): object {
+    @Method public getStyle(): object {
         return {
             '--width': this.xSize.equalsIgnoreCase('small') ? '30px' : (this.xSize.equalsIgnoreCase('normal') ? '40px' : '40px'),
             '--height': this.xSize.equalsIgnoreCase('small') ? '24px' : (this.xSize.equalsIgnoreCase('normal') ? '28px' : '32px'),
@@ -34,18 +28,15 @@ export class SwitchX extends AbstractComponent {
         };
     }
 
-    @Method
-    public getClass(): object {
+    @Method public getClass(): object {
         return {
             'dinglj-v-switch-btn': true,
             'active': this.active
         };
     }
 
-    @Method
-    public onclicked(): void {
+    @Method public onclicked(): void {
         this.active = !this.active;
-        this.emit('on-change', this.active);
         if (this.active) {
             if (this.postText) {
                 `已切换至: ${ this.postText }`.info();
@@ -55,14 +46,37 @@ export class SwitchX extends AbstractComponent {
                 `已切换至: ${ this.preText }`.info();
             }
         }
+        this.iProps.onChange && this.iProps.onChange({
+            vid: this.vid,
+            value: this.active,
+        })
     }
 
-    @Prop(String, 'normal')
-    public xSize: 'small' | 'normal' | 'big';
+    @Compute((self: SwitchX): SwitchSize => self.iProps.size || 'normal')
+    public xSize: SwitchSize;
 
-    @Prop(String, '')
+    @Compute((self: SwitchX) => self.iProps.preTxt || '')
     public preText: string;
 
-    @Prop(String, '')
+    @Compute((self: SwitchX) => self.iProps.postTxt || '')
     public postText: string;
+
 }
+
+declare global {
+    /** 控件大小 */
+    type SwitchSize = 'small' | 'normal' | 'big';
+    /** 开关相关参数 */
+    interface SwitchProps {
+        /** 大小 */
+        size?: SwitchSize;
+        /** 开关前面的文字 */
+        preTxt?: string;
+        /** 开关后的文字 */
+        postTxt?: string;
+        /** 值变化事件 */
+        onChange?(args: EmitArgs<Boolean>): void;
+    }
+}
+
+$registry.buildAndRegist(ComponentType.SwitchX);

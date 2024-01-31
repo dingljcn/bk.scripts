@@ -11,6 +11,14 @@ enum ComponentType {
     TabView         = 'I-Tab-View',
     NavigatorView   = 'I-Nav-View',
     ProgressX       = 'I-Progress',
+    ModalX          = 'I-Modal',
+    ContextMenuX    = 'I-Context-Menu',
+}
+
+declare global {
+    interface Window {
+        ComponentType: any;
+    }
 }
 
 window.ComponentType = ComponentType;

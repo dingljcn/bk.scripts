@@ -1,43 +1,55 @@
-import { AbstractComponent, ComponentType } from "core/entity";
-import { Method, Mounted, Prop, Template } from "..";
+import { AbstractComponent, ComponentType } from "core";
 
-export class ButtonX extends AbstractComponent {
+@Service(ButtonX, ComponentType.ButtonX, true)
+export default class ButtonX extends AbstractComponent<ButtonProps> {
 
-    @Mounted(ButtonX, ComponentType.ButtonX)
-    public mounted() {
-        this.vid = window.uuid(this.name);
-        this.emit('mounted', this.vid);
-    }
-
-    @Template
-    template: string = `<div :class="getClass()" :id="vid" :style="getStyle()" @click="$emit('on-click')">
+    @Template template: string = `<div :class="getClass()" :id="vid" :style="getStyle()" @click="$singleClick">
         <slot></slot>
     </div>`;
-    
-    @Prop(String, 'normal')
-    xSize: 'small' | 'normal' | 'big';
 
-    @Prop(String, 'primary')
-    xType: 'primary' | 'warn' | 'error' | 'cancel';
-
-    @Method
-    getClass(): object {
+    @Method public getClass(): object {
         return {
             'dinglj-v-btn': true, 
             'dinglj-v-ctl': true,
-            'primary': this.xType.equalsIgnoreCase('primary'),
-            'cancel': this.xType.equalsIgnoreCase('cancel'),
-            'warn': this.xType.equalsIgnoreCase('warn'),
-            'error': this.xType.equalsIgnoreCase('error'),
+            'primary': this.$type == 'primary',
+            'cancel': this.$type == 'cancel',
+            'warn': this.$type == 'warn',
+            'error': this.$type == 'error',
         };
     }
 
-    @Method
-    getStyle(): object {
+    @Method public getStyle(): object {
         return {
-            '--height': this.xSize.equalsIgnoreCase('small') ? '24px' : (this.xSize.equalsIgnoreCase('normal') ? '28px' : '32px'),
-            '--margin-tb': this.xSize.equalsIgnoreCase('small') ? '1px' : (this.xSize.equalsIgnoreCase('normal') ? '2px' : '3px'),
+            '--height': this.$size.equalsIgnoreCase('small') ? '24px' : (this.$size.equalsIgnoreCase('normal') ? '28px' : '32px'),
+            '--margin-tb': this.$size.equalsIgnoreCase('small') ? '1px' : (this.$size.equalsIgnoreCase('normal') ? '2px' : '3px'),
         };
     }
+
+    @Compute((self: ButtonX) => self.iProps.singleClick || ((e: MouseEvent) => {}))
+    public $singleClick: Function;
+
+    @Compute((self: ButtonX) => self.iProps.size || 'normal')
+    public $size: ButtonSize;
+
+    @Compute((self: ButtonX) => self.iProps.type || 'primary')
+    public $type: ButtonType;
 
 }
+
+declare global {
+    /** 按钮大小 */
+    type ButtonSize = 'small' | 'normal' | 'big';
+    /** 按钮类型 */
+    type ButtonType = 'primary' | 'warn' | 'error' | 'cancel';
+    /** 按钮参数 */
+    interface ButtonProps {
+        /** 大小 */
+        size?: ButtonSize;
+        /** 类型 */
+        type?: ButtonType;
+        /** 点击事件 */
+        singleClick?(event: MouseEvent): void;
+    }
+}
+
+$registry.buildAndRegist(ComponentType.ButtonX);

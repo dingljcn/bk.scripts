@@ -1,32 +1,23 @@
-import { AbstractComponent, ComponentType } from "core/entity";
-import { Method, Mounted, Prop, Template } from "..";
+import { AbstractComponent, ComponentType } from "core";
 
-export class ProgressX extends AbstractComponent {
+@Service(ProgressX, ComponentType.ProgressX, true)
+export default class ProgressX extends AbstractComponent<ProgressProps> {
 
-    @Mounted(ProgressX, ComponentType.ProgressX)
-    public mounted(): void {
-        this.vid = window.uuid(this.name);
-        this.emit('mounted', this.vid);
-    }
-
-    @Template
-    public template: string = `<div class="dinglj-v-progress-bar" :id="vid">
-        <span :class="{ 'dinglj-v-progress-caption': true, 'top': true, 'right': position == 'rt' }" v-if="['lt', 'rt'].includesIgnoreCase(position)">{{ caption }}{{ percent }}</span>
+    @Template public template: string = `<div class="dinglj-v-progress-bar" :id="vid">
+        <span :class="{ 'dinglj-v-progress-caption': true, 'top': true, 'right': position == 'TopRight' }" v-if="['TopLeft', 'TopRight'].includesIgnoreCase(position)">{{ caption }}{{ percent }}</span>
         <div class="dinglj-v-progress-box" :style="getContainerStyle()">
             <div class="dinglj-v-progress" :style="getProgressStyle()"></div>
         </div>
-        <span :class="{ 'dinglj-v-progress-caption': true, 'bottom': true, 'right': position == 'rb' }" v-if="['lb', 'rb'].includesIgnoreCase(position)">{{ caption }}{{ percent }}</span>
+        <span :class="{ 'dinglj-v-progress-caption': true, 'bottom': true, 'right': position == 'BottomRight' }" v-if="['BottomLeft', 'BottomRight'].includesIgnoreCase(position)">{{ caption }}{{ percent }}</span>
     </div>`;
     
-    @Method
-    public getContainerStyle(): object {
+    @Method public getContainerStyle(): object {
         return {
             '--bar-height': this.height,
         }
     }
 
-    @Method
-    public getProgressStyle(): object {
+    @Method public getProgressStyle(): object {
         setTimeout(() => {
             const container = window.byId(this.vid);
             const box = container.findChildrenByClass('dinglj-v-progress-box')[0];
@@ -37,16 +28,38 @@ export class ProgressX extends AbstractComponent {
         }
     }
 
-    @Prop(String, '5px')
+    /** 高度, 单位: px */
+    @Compute((self: ProgressX) => (self.iProps.height || 5) + 'px')
     public height: string;
 
-    @Prop(String, '100%')
+    /** 进度条的进度百分比 */
+    @Compute((self: ProgressX) => self.iProps.percent || '100%')
     public percent: string;
 
-    @Prop(String, 'lt')
-    public position: 'lt' | 'lb' | 'rt' | 'rb';  // left-top, left-bottom, right-top, right-bottom
+    /** 位置 */
+    @Compute((self: ProgressX): ProgressTxtPosition => self.iProps.txtPosition || 'TopLeft')
+    public position: ProgressTxtPosition;
 
-    @Prop(String, '')
+    /** 控件名称 */
+    @Compute((self: ProgressX) => self.iProps.caption || '')
     public caption: string;
 
 }
+
+declare global {
+    /** 进度条文本显示位置 */
+    type ProgressTxtPosition = 'TopLeft' | 'TopRight' | 'BottomLeft' | 'BottomRight';
+    /** 进度条相关参数 */
+    interface ProgressProps {
+        /** 进度条的进度百分比 */
+        percent: string;
+        /** 控件名称 */
+        caption: string;
+        /** 高度, 单位: px */
+        height?: number;
+        /** 位置 */
+        txtPosition?: ProgressTxtPosition;
+    }
+}
+
+$registry.buildAndRegist(ComponentType.ProgressX);

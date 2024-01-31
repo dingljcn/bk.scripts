@@ -1,67 +1,90 @@
-import { AbstractComponent, ComponentType } from "core/entity";
-import { Field, Method, Mounted, Prop, Template } from "..";
+import { AbstractComponent, ComponentType } from "core";
 
-export class ComboX<T> extends AbstractComponent {
+@Service(ComboX, ComponentType.ComboX, true)
+export default class ComboX<T> extends AbstractComponent<ComboProps<T>> {
 
-    @Mounted(ComboX, ComponentType.ComboX)
-    public mounted(): void {
-        this.vid = window.uuid(this.name);
-        this.emit('mounted', this.vid);
-    }
-
-    @Template
-    public template: string = `<div class="dinglj-v-ctl dinglj-v-input combo" :style="getStyle()" :caption="caption" :id="vid">
-        <input :placeholder="placeholder" type="text" :value="list.includesIgnoreCase(value) ? getValue(value) : ''"/>
-        <img :src="getImg('/src/assets/img/delete.png')" class="clean" @click="setValue('')"/>
+    @Template public template: string = `<div class="dinglj-v-ctl dinglj-v-input combo" :style="getStyle()" :caption="$caption" :id="vid">
+        <input :placeholder="$placeholder" type="text" :value="$list.includesIgnoreCase(value) ? $getValue(value) : ''"/>
+        <img :src="getImg('delete.png')" class="clean" @click="setValue('')"/>
         <div class="dinglj-v-combo-selections">
-            <div class="dinglj-v-combo-selection" v-for="item in list" @click="setValue(item)">
-                {{ getCaption(item) }}
+            <div class="dinglj-v-combo-selection" v-for="item in $list" @click="setValue(item)">
+                {{ $getLabel(item) }}
             </div>
         </div>
     </div>`;
 
-    @Field
-    public value: T = null;
+    @Field public value: T = null;
 
-    @Method
-    public setValue(value: T): void {
+    @Method public setValue(value: T): void {
         if (this.value != value) {
             this.value = value;
-            this.emit('on-change', value);
+            this.$onChange(value);
         }
     }
 
-    @Method
-    public getStyle(): object {
-        const result = {
-            '--height': this.xSize.equalsIgnoreCase('small') ? '24px' : (this.xSize.equalsIgnoreCase('normal') ? '28px' : '32px'),
-            '--width': this.xSize.equalsIgnoreCase('small') ? '180px' : (this.xSize.equalsIgnoreCase('normal') ? '200px' : '220px'),
+    @Method public getStyle(): object {
+        return {
+            '--height': this.$size == 'small' ? '24px' : (this.$size == 'normal' ? '28px' : '32px'),
+            '--width': this.$size == 'small' ? '180px' : (this.$size == 'normal' ? '200px' : '220px'),
         };
-        return result;
     }
 
-    /** 要显示的数据 */
-    @Prop(Array<T>, [])
-    public list: Array<T>;
+    /** 值变化事件 */
+    @Method public $onChange(data: T): void {
+        if (this.iProps.onChange) {
+            this.iProps.onChange({
+                vid: this.vid,
+                value: data,
+            });
+        }
+    };
 
-    /** 大小 */
-    @Prop(String, 'normal')
-    public xSize: 'small' | 'normal' | 'big';
+    /** 要显示的数据, 默认无数据 */
+    @Compute((self: ComboX<T>) => self.iProps.list || [])
+    public $list: Array<T>;
+
+    /** 组件大小, 默认为 normal */
+    @Compute((self: ComboX<T>) => self.iProps.size || 'normal')
+    public $size: ComboSize;
 
     /** 控件名称 */
-    @Prop(String, '')
-    public caption: string;
+    @Compute((self: ComboX<T>) => self.iProps.caption || '')
+    public $caption: string;
 
     /** 占位符 */
-    @Prop(String, '')
-    public placeholder: string;
+    @Compute((self: ComboX<T>) => self.iProps.placeholder || `请选择${ self.$caption }`)
+    public $placeholder: string;
 
     /** 获取元素要显示的内容, 默认显示元素本身 */
-    @Prop(Function, (item: T) => item)
-    public getCaption: Function;
+    @Compute((self: ComboX<T>) => self.iProps.getLabel || ((item: T) => item))
+    public $getLabel: Function;
 
     /** 获取元素的值, 默认值就是元素本身 */
-    @Prop(Function, (item: T) => item)
-    public getValue: Function;
+    @Compute((self: ComboX<T>) => self.iProps.getValue || ((item: T) => item))
+    public $getValue: Function;
 
 }
+
+declare global {
+    /** 下拉框大小 */
+    type ComboSize = ButtonSize;
+    /** 下拉框参数 */
+    interface ComboProps<T> {
+        /** 选择列表 */
+        list: Array<T>;
+        /** 组件名称 */
+        caption: string;
+        /** 占位文字 */
+        placeholder?: string;
+        /** 大小 */
+        size?: ComboSize;
+        /** 值变化事件 */
+        onChange?(data: EmitArgs<any>): void;
+        /** 获取显示的文字 */
+        getLabel?(item: T): string;
+        /** 获取实际值 */
+        getValue?(item: T): any;
+    }
+}
+
+$registry.buildAndRegist(ComponentType.ComboX);

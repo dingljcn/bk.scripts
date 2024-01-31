@@ -1,28 +1,25 @@
-
-
-window.defunc('byId', function(id: string): HTMLElement {
+Window.prototype.byId = function(id: string): HTMLElement {
     return document.getElementById(id);
-});
+}
 
-window.defunc('byClass', function(classes: string): Array<HTMLElement> {
+Window.prototype.byClass = function(classes: string, document: Document = window.document): Array<HTMLElement> {
     const result: Array<HTMLElement> = [];
     const findData: any = document.getElementsByClassName(classes);
     if (findData) {
         result.push(...findData);
     }
     return result;
-});
+}
 
-window.defunc('query', function(selector: string): Array<HTMLElement> {
+Window.prototype.query = function(selector: string): Array<HTMLElement> {
     let result = [];
     const findData: any = document.querySelectorAll(selector);
     if (findData) {
         result.push(...findData);
     }
     return result;
-});
+}
 
-/** 计算文本宽度 */
 window.defunc(window, 'calcTxtWidth', function(item: string | HTMLElement): number {
     if (typeof item == 'object') {
         const computedStyle = window.getComputedStyle(item);
@@ -33,7 +30,6 @@ window.defunc(window, 'calcTxtWidth', function(item: string | HTMLElement): numb
     }
 });
 
-/** 计算文本宽度 */
 window.defunc(window, 'calcTxtWidth', function(txt: string, fontWeight: string, fontSize: string, fontFamily: string): number {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
@@ -60,7 +56,6 @@ Element.prototype.animate = function(config, transition) {
     }, 50);
 }
 
-/** 根据 class 找孩子DOM节点 */
 Element.prototype.findChildrenByClass = function(clazz) {
     let result = [];
     let list = this.children;
@@ -72,8 +67,11 @@ Element.prototype.findChildrenByClass = function(clazz) {
     return result;
 };
 
-/** 根据 class 找孩子DOM节点 */
-window.defunc('indexOfChildByClass', (parent: HTMLElement, _class: string) => {
+Element.prototype.findBroByClass = function(clazz) {
+    return this.parentElement.findChildrenByClass(clazz);
+}
+
+Window.prototype.indexOfChildByClass = function(parent: HTMLElement, _class: string): number {
     let list = parent.children;
     for(let i = 0; i < list.length; i++) {
         if (list[i].classList.contains(_class)) {
@@ -81,4 +79,4 @@ window.defunc('indexOfChildByClass', (parent: HTMLElement, _class: string) => {
         }
     }
     return -1;
-});
+};

@@ -1,5 +1,3 @@
-
-
 window.defunc('uuid', function(): string {
     return window.uuid('', 10);
 });
@@ -127,23 +125,48 @@ window.defunc('compareStringByArray', function(order: Array<string>, o1: string,
     return 0;
 });
 
-window.defunc('pushToArrayInObject', function(object: any, fieldKey: string, value: any): object {
+Window.prototype.pushToArrayInObject = function(object: any, fieldKey: string, value: any, dontRepeat = false): object {
     if (Array.isArray(object[fieldKey])) {
-        (object[fieldKey] as Array<any>).push(value);
+        let array: Array<any> = object[fieldKey];
+        if (dontRepeat) {
+            if (!array.includes(value)) {
+                array.push(value);
+            }
+        } else {
+            array.push(value);
+        }
     } else {
         object[fieldKey] = [ value ];
     }
     return object;
-});
+};
+
+Window.prototype.unshiftToArrayInObject = function(object: any, fieldKey: string, value: any): object {
+    if (Array.isArray(object[fieldKey])) {
+        (object[fieldKey] as Array<any>).unshift(value);
+    } else {
+        object[fieldKey] = [ value ];
+    }
+    return object;
+};
 
 Window.prototype.defaultConfig = function(): any {
-    return window.$rsa.decryptObject(window.encodeConfig());
+    return $rsa.decryptObject(window.encodeConfig());
 }
 
-Window.prototype.timer = function(conditionFunc: Function, time: number = 30) {
+Window.prototype.timer = function<T>(conditionFunc: Function, param?: number | T) {
+    let time: number = 30;
+    let object: T = null;
+    if (param) {
+        if (typeof param == 'number') {
+            time = param;
+        } else {
+            object = param;
+        }
+    }
     time = time < 30 ? 30 : time;
     let timer = setInterval(() => {
-        if (conditionFunc()) {
+        if (conditionFunc(object)) {
             clearInterval(timer);
         }
     }, time);
@@ -155,4 +178,19 @@ Window.prototype.createRegExp = function(str: string | RegExp): RegExp {
     }
     str = str.replace(/\$_/g, '\\');
     return new RegExp(str);
+}
+
+Window.prototype.copyTxt = function(text: string): void {
+    let target = document.createElement('div');
+    target.innerText = text;
+    target.style.opacity = '0';
+    document.body.appendChild(target);
+    let range = document.createRange();
+    range.selectNodeContents(target);
+    const selection = window.getSelection();
+    selection.addRange(range);
+    document.execCommand("Copy", false, null);
+    selection.removeAllRanges();
+    `已复制: ${ text }`.info();
+    target.remove();
 }

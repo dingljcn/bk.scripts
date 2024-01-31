@@ -1,53 +1,49 @@
-import { AbstractComponent, Compute, Field, Method, Mounted, Prop, Registry, Template } from "core";
-import NavType from "./NavType";
-import { $tool } from "./tool";
+import { AbstractComponent } from "core";
 
-export class TIV_Step extends AbstractComponent {
+@Service(AppStep, 'AppStep')
+export class AppStep extends AbstractComponent<any> {
     
-    @Mounted(TIV_Step, 'iv-step')
-    public mounted(): void {
-        this.vid = window.uuid(this.name);
-        this.emit('mounted', this.vid);
+    @Mounted public mounted(): void {
         /** 行加载完后会调用这里, 进行初始化 */
-        window.$queue.on('init-steps', (line: string) => {
+        $queue.on('init-steps', (line: string) => {
             this.line = line;
-            window.timer(() => {
-                if (this.steps.length > 0) {
-                    this.setIdx(this.steps.length - 1);
+            window.timer<AppStep>((self: AppStep) => {
+                if (self.steps.length > 0) {
+                    self.setIdx(self.steps.length - 1);
                     return true;
                 }
                 return false;
-            });
+            }, this);
         });
         /** 行切换事件 */
-        window.$queue.on('line-changed', (data: LineChangeProp) => {
+        $queue.on('line-changed', (data: LineChangeProp) => {
             this.lastSteps = this.steps;
             this.line = data.line;
-            window.timer(() => {
-                if (this.lastSteps != this.steps) {
+            window.timer<AppStep>((self: AppStep) => {
+                if (self.lastSteps != self.steps) {
                     if (data.expect) { // 指定了下标
-                        if (data.expect > 0 && data.expect < this.steps.length) {
-                            this.setIdx(data.expect, true); // 下标在范围内, 按指定下标跳转
+                        if (data.expect > 0 && data.expect < self.steps.length) {
+                            self.setIdx(data.expect, true); // 下标在范围内, 按指定下标跳转
                         } else {
-                            this.setIdx(this.steps.length - 1, true); // 不在范围内, 跳到最后一个
+                            self.setIdx(self.steps.length - 1, true); // 不在范围内, 跳到最后一个
                         }
                     } else {
-                        this.setIdx(0, true); // 默认到第一个
+                        self.setIdx(0, true); // 默认到第一个
                     }
                     if (!data.toStep) {
-                        window.$queue.sendMsg('change-active-panel', NavType.Line); // 焦点还给行
+                        $queue.sendMsg<NavType>('change-active-panel', 'Line'); // 焦点还给行
                     }
                     return true;
                 }
                 return false;
-            });
+            }, this);
         })
         /** 方向键绑定 */
-        window.$queue.on('update-step', (prop: ScrollProp) => {
+        $queue.on('update-step', (prop: ScrollProp) => {
             this.doScroll(prop);
         });
         /** 跳转到指定步骤 */
-        window.$queue.on('jumpToStep', (stepNumber: string) => {
+        $queue.on('jumpToStep', (stepNumber: string) => {
             let idx = -1;
             for (let i = 0; i < this.steps.length; i++) {
                 if (this.steps[i].startsWith(`${ stepNumber }_`)) {
@@ -62,31 +58,42 @@ export class TIV_Step extends AbstractComponent {
     }
 
     @Template
-    public template: string = `<div id="step-container">
-        <div :class="{ 'step': true, 'arrow': true, 'active': arrow == 'step' }">
-            <div :title="stepNumber" :class="{ 'step-number': true, 'active': current == idx, 'last': last == idx }" v-for="(stepNumber, idx) of steps" @click="setIdx(idx)">
+    public template: string = `<div id="step-container">{{arrow}}
+        <div :class="containerClass">
+            <div :title="stepNumber" :class="itemClass(idx)" v-for="(stepNumber, idx) of steps" @click="setIdx(idx)">
                 {{ stepNumber.replace(/\.png/, '') }}
             </div>
         </div>
     </div>`;
 
-    @Field
-    public map: any = {};
+    @Compute((self: AppStep) => {
+        return {
+            step: true,
+            arrow: true,
+            active: self.arrow == 'Step',
+        }
+    })
+    public containerClass: any;
 
-    @Field
-    public current: number = -1;
+    @Method itemClass(idx: number) {
+        return {
+            'step-number': true,
+            'active': this.current == idx,
+            'last': this.last == idx
+        }
+    }
 
-    @Field
-    public last: number = -1;
+    @Field public map: any = {};
 
-    @Field
-    public line: string = '';
+    @Field public current: number = -1;
 
-    @Field
-    public lastSteps: Array<string> = [];
+    @Field public last: number = -1;
 
-    @Method
-    public setIdx(i: number, lineChanged = false) {
+    @Field public line: string = '';
+
+    @Field public lastSteps: Array<string> = [];
+
+    @Method public setIdx(i: number, lineChanged = false) {
         const stepContainer = window.byClass('step arrow')[0];
         if (stepContainer) {
             const limit = $tool.getLimit(stepContainer);
@@ -101,52 +108,51 @@ export class TIV_Step extends AbstractComponent {
         }
     }
 
-    @Method
-    public doScroll(prop: ScrollProp) {
+    @Method public doScroll(prop: ScrollProp) {
         const next = prop.current + prop.direction;
         if (!prop.lineChanged && this.current == next) {
             return;
         } else if (next < 0) {
-            window.$queue.sendMsg('toPrevLine', {});
+            $queue.sendMsg('toPrevLine', {});
         } else if (next >= this.steps.length) {
-            window.$queue.sendMsg('toNextLine', {});
+            $queue.sendMsg('toNextLine', {});
         } else {
             window.byId('step-container').scrollTo(0, prop.height * prop.qty);
             this.last = this.current;
             this.current = next;
-            window.$queue.sendMsg('change-img', `1/${ this.line }/${ this.steps[next] }`);
+            $queue.sendMsg('change-img', `1/${ this.line }/${ this.steps[next] }`);
         }
         if (prop.lineChanged) {
             this.last = -1;
         }
-        window.$queue.sendMsg('tab-view:to', '当前图片', this.tabPanelId);
-        window.$queue.sendMsg('change-active-panel', 'step');
+        $queue.sendMsg('tab-view:to', '当前图片', this.tabPanelId);
+        $queue.sendMsg<NavType>('change-active-panel', 'Step');
     }
 
-    @Compute(function() {
-        if (this.line.trim() == '') {
+    @Compute((self: AppStep) => {
+        if (self.line.trim() == '') {
             return [];
         }
-        if (this.map[this.line]) {
-            return this.map[this.line];
+        if (self.map[self.line]) {
+            return self.map[self.line];
         }
         if (window.readSteps) {
-            const result = window.readSteps(this.line);
-            this.map[this.line] = result;
+            const result = window.readSteps(self.line);
+            self.map[self.line] = result;
             return result;
         }
         const regExp = /.*\.png">(.*.png)<\/a>.*/;
-        const response = window.get<string>(`${ window.location.href }1/${ this.line }`);
+        const response = window.get<string>(`${ window.location.href }1/${ self.line }`);
         const stepNumbers = response.split('\n');
         const result = stepNumbers.map(step =>  regExp.test(step) ? regExp.exec(step)[1] : '')
             .filter(href => href != '')
             .map(href => href.replace(/\/$/, ''));
-        this.map[this.line] = result;
+        self.map[self.line] = result;
         return result;
     })
     public steps: Array<string>;
 
-    @Prop(String, NavType.Step, true)
+    @Prop(String, 'Step', true)
     public arrow: NavType;
 
     @Prop(String, '')
@@ -154,4 +160,4 @@ export class TIV_Step extends AbstractComponent {
 
 }
 
-export const ivstep = Registry.getComponent('iv-step').build();
+export default $registry.buildComponent('AppStep');

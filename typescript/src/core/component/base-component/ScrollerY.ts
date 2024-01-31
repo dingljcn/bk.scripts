@@ -1,27 +1,21 @@
-import { AbstractComponent, ComponentType } from "core/entity";
-import { Method, Mounted, Prop, Template } from "..";
+import { AbstractComponent, ComponentType } from "core";
 
-export class ScrollerY extends AbstractComponent {
+@Service(ScrollerY, ComponentType.ScrollerY, true)
+export default class ScrollerY extends AbstractComponent<ScrollYProps> {
 
-    @Mounted(ScrollerY, ComponentType.ScrollerY)
-    public mounted(): void {
-        this.vid = window.uuid(this.name);
-        this.emit('mounted', this.vid);
-    }
-
-    @Template
-    public template: string = `<div class="dinglj-v-column-scroll" :id="vid" :style="getStyle()">
+    @Template public template: string = `<div class="dinglj-v-column-scroll" :id="vid" :style="getStyle()">
         <slot></slot>
     </div>`;
 
-    @Prop(Number, 0)
+    /** 总个数 */
+    @Compute((self: ScrollerY) => self.iProps.size || 0)
     public size: number;
 
-    @Prop(Number, 0)
+    /** 当前下标 */
+    @Compute((self: ScrollerY) => self.iProps.index || 0)
     public index: number;
     
-    @Method
-    getStyle(): object {
+    @Method getStyle(): object {
         return {
             'top': `-${ (this.index >= 0 && this.index < this.size) ? this.index : 0 }00%`,
             'height': `${ this.size }00%`
@@ -29,3 +23,10 @@ export class ScrollerY extends AbstractComponent {
     }
     
 }
+
+declare global {
+    /** 纵向滚动面板相关参数 */
+    type ScrollYProps = ScrollXProps
+}
+
+$registry.buildAndRegist(ComponentType.ScrollerY);

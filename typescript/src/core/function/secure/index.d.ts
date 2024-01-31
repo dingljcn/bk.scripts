@@ -13,6 +13,12 @@ declare global {
         /** 指定私钥解密 */
         decryptObject(data: object, privateKey: string): object,
     }
+    /** rsa 工具类 */
+    const $rsa: DingljSecure;
+    interface Window {
+        /** rsa 工具类 */
+        $rsa: DingljSecure;
+    }
 }
 
 export {};

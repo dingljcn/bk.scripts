@@ -1,6 +1,14 @@
-import { AbstractComponent, Registry } from "core/entity";
-
-/** 字段 */
-export function Field(target: AbstractComponent, propertyKey: string) {
-    Registry.getComponent().meta.fieldNames.push(propertyKey);
+declare global {
+    /** 定义一个字段 */
+    function Field(target: DefaultComponent, propertyKey: string): void;
+    interface Window {
+        /** 定义一个字段 */
+        Field(target: DefaultComponent, propertyKey: string): void;
+    }
 }
+
+window.Field = function(target: DefaultComponent, propertyKey: string): void {
+    $registry.getComponent().fieldNames.push(propertyKey);
+}
+
+export {};

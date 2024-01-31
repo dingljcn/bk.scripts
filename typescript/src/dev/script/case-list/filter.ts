@@ -1,96 +1,113 @@
-import { AbstractComponent, Mounted, Template, Field, Watch, Compute, Registry } from "core";
+import { AbstractComponent, LangItem } from "core";
 
-class Filter extends AbstractComponent {
-
-    @Mounted(Filter, 'CL-Filter')
-    public mounted(): void {
-        this.vid = window.uuid(this.name);
-        this.emit('mounted', this.vid);
-    }
+@Service(Filter, 'CL-Filter')
+class Filter extends AbstractComponent<any> {
 
     @Template
     public template: string = `<div id="case-filter">
         <div class="filter-row">
-            <i-input caption="搜索" placeholder="请输入关键字"
-                @on-change="data => filter.keyword = data.value">
-            </i-input>
-            <i-combo caption="状态" placeholder="请选择状态"
-                style="margin-left: 10px"
-                :list="Object.values(status)"
-                :get-value="i => i.en" 
-                :get-caption="i => i.zh"
-                @on-change="s => filter.status = s.value">
-            </i-combo>
-            <i-combo caption="版本" placeholder="默认为当前版本"
-                style="margin-left: 10px; --width: 400px"
-                :list="versionNames"
-                @on-change="v => filter.versions = v.value">
-            </i-combo>
+            <i-input :i-props="keywordProps"></i-input>
+            <i-combo style="margin-left: 10px" :i-props="statusProps"></i-combo>
+            <i-combo style="margin-left: 10px; --width: 400px" :i-props="versionProps"></i-combo>
             <div class="dinglj-v-flex"></div>
-            <i-switch pre-text="卡片视图" post-text="表格视图" @on-change="data => filter.mode = (data.value ? 'table' : 'card')">
-            </i-switch>
+            <i-switch :i-props="modeProps"></i-switch>
         </div>
         <div class="filter-row" v-if="filter.mode == 'card'">
-            <i-input caption="每列的卡片数" placeholder="请输入每列的卡片数量"
-                default-value="7"
-                @on-input="data => filter.cardCnt = ((isNaN(data.value) || data.value < 5) ? 5 : parseInt(data.value))">
-            </i-input>
+            <i-input :i-props="cardCntProps"></i-input>
         </div>
     </div>`;
 
-    @Field
-    public filter = {
+    @Field public filter: AppFilter = {
         keyword: '',
         status: '',
         versions: '',
         mode: 'card',
-        cardCnt: 7,
+        cardCnt: '7',
     }
 
-    @Field
-    public versionList: Array<string> = [];
+    @Field public versionList: Array<string> = [];
+
+    @Compute((self: Filter): InputProps => {
+        return {
+            caption: '搜索',
+            placeholder: '请输入关键字',
+            onChange: (data) => self.filter.keyword = data.value,
+        }
+    })
+    public keywordProps: InputProps;
+
+    @Compute((self: Filter): ComboProps<LangItem> => {
+        return {
+            caption: '状态',
+            list: Object.values(self.status),
+            getValue: item => item.en,
+            getLabel: item => item.zh,
+            onChange: data => self.filter.status = data.value,
+        }
+    })
+    public statusProps: ComboProps<LangItem>;
+
+    @Compute((self: Filter): ComboProps<string> => {
+        return {
+            caption: '版本',
+            placeholder: '默认为当前版本',
+            list: self.versionNames,
+            onChange: data => self.filter.status = data.value,
+        }
+    })
+    public versionProps: ComboProps<string>;
+    
+    @Compute((self: Filter): SwitchProps => {
+        return {
+            preTxt: '卡片视图',
+            postTxt: '表格视图',
+            onChange: data => self.filter.mode = (data.value ? 'table' : 'card')
+        }
+    })
+    public modeProps: SwitchProps;
+
+    @Compute((self: Filter): InputProps => {
+        return {
+            caption: '每列的卡片数',
+            placeholder: '请输入每列的卡片数量',
+            defaultValue: '7',
+            onChange: (data) => self.filter.cardCnt = data.value,
+        }
+    })
+    public cardCntProps: InputProps;
+
+    /** 获取用户配置 */
+    @Compute(window.readConfig)
+    public config: any;
+
+    /** 获取脚本设置的默认配置 */
+    @Compute(window.defaultConfig)
+    public defaultConfig: any;
+
+    /** 状态 */
+    @Compute((self: Filter) => window.getConfigOrDefault(self.config, self.defaultConfig, 'constant.status', [], true))
+    public status: any
+
+    @Compute((self: Filter) => {
+        if (window.isDev()) {
+            return (window as any).readVersion();
+        }
+        if (self.versionList.length == 0) {
+            let versions = window.getConfigOrDefault(self.config, self.defaultConfig, 'urls.versions', '', false);
+            self.versionList = JSON.parse(window.get(versions));
+        }
+        return self.versionList;
+    })
+    public versions: Array<any>;
+
+    @Compute((self: Filter) => self.versions.map((i: any) => i.erpVersion))
+    public versionNames: Array<string>;
 
     @Watch('filter')
     public onFilterChange(newVal: any, oldVal: any): void {
         this.emit('on-change', newVal);
-        console.log(newVal);
     }
-    
-    /** 获取用户配置 */
-    @Compute(function() {
-        return window.readConfig();
-    })
-    public config: any;
-
-    /** 获取脚本设置的默认配置 */
-    @Compute(function() {
-        return window.defaultConfig();
-    })
-    public defaultConfig: any;
-
-    /** 状态 */
-    @Compute(function(): Array<any> {
-        return window.getConfigOrDefault(this.config, this.defaultConfig, 'constant.status', [], true);
-    })
-    public status: any
-
-    @Compute(function(): Array<any> {
-        if (window.isDev()) {
-            return (window as any).readVersion();
-        }
-        if (this.versionList.length == 0) {
-            let versions = window.getConfigOrDefault(this.config, this.defaultConfig, 'urls.versions', '', false);
-            this.versionList = JSON.parse(window.get(versions));
-        }
-        return this.versionList;
-    })
-    public versions: Array<any>;
-
-    @Compute(function() {
-        return this.versions.map((i: any) => i.erpVersion);
-    })
-    public versionNames: Array<string>;
 
 }
 
-export const filter = Registry.getComponent('CL-Filter').build();
+export default $registry.buildComponent('CL-Filter');

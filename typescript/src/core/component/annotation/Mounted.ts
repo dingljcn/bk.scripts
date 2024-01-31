@@ -1,11 +1,14 @@
-import { AbstractComponent, Registry, ComponentType } from "core/entity";
-
-/** 挂载后事件 */
-export function Mounted(componentClass: any, type: string) {
-    return function (target: AbstractComponent, propertyKey: string, descriptor: PropertyDescriptor) {
-        const component = Registry.getComponent(type);
-        component.meta.hockMounted = propertyKey;
-        component.meta.clazz = componentClass;
-        component.name = type;
+declare global {
+    /** 定义加载后事件 */
+    function Mounted(target: DefaultComponent, propertyKey: string, descriptor: PropertyDescriptor): void;
+    interface Window {
+        /** 定义加载后事件 */
+        Mounted(target: DefaultComponent, propertyKey: string, descriptor: PropertyDescriptor): void;
     }
 }
+
+window.Mounted = function(target: DefaultComponent, propertyKey: string, descriptor: PropertyDescriptor) {
+    $registry.getComponent().mountedName = propertyKey;
+}
+
+export {};

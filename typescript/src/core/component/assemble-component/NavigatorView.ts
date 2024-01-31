@@ -1,42 +1,57 @@
-import { AbstractComponent, ComponentType, EmitPara } from "core/entity";
-import { Component, Mounted, Template, Prop, Field, Method } from "..";
+import { AbstractComponent, ComponentType } from "core";
 
-export class NavigatorView<T> extends AbstractComponent {
+@Service(NavigatorView, ComponentType.NavigatorView, true)
+export default class NavigatorView<T> extends AbstractComponent<NavigatorViewProps<T>> {
 
-    @Mounted(NavigatorView, ComponentType.NavigatorView)
-    public mounted(): void {
-        this.vid = window.uuid(this.name);
-    }
-
-    @Template
-    public template: string = `<div class="dinglj-v-navigator-view">
-        <i-navigator style="margin-right: 10px" :list="list" :get-caption="getCaption" @on-change="changed">
-        </i-navigator>
+    @Template public template: string = `<div class="dinglj-v-navigator-view">
+        <!-- 左侧导航窗格 -->
+        <i-navigator style="margin-right: 10px" :i-props="navigatorProps"></i-navigator>
+        <!-- 右侧主要内容显示部分 -->
         <div class="dinglj-v-navigator-right">
+            <!-- 主要内容前的插槽 -->
             <slot name="before"></slot>
             <div class="dinglj-v-navigator-content">
-                <i-scroller-y :index="list.indexOf(active)" :size="list.length">
+            <!-- 主要内容部分用纵向滚动视图, 并提供插槽 -->
+                <i-scroller-y :i-props="scrollyProps">
                     <slot name="content"></slot>
                 </i-scroller-y>
             </div>
+            <!-- 主要内容后的插槽 -->
             <slot name="after"></slot>
         </div>
     </div>`;
 
-    @Field
-    public active: T = null;
+    @Field public active: T = null;
 
-    @Method
-    public changed(item: EmitPara) {
-        this.active = item.value;
-        this.emit('on-change', item);
-    }
+    @Compute((self: NavigatorView<T>): NavigatorProps<T> => {
+        return {
+            list: self.list,
+            onChange: function(item: EmitArgs<T>) {
+                self.active = item.value;
+                self.iProps.onChange && self.iProps.onChange({
+                    vid: self.vid,
+                    value: item.value
+                })
+            }
+        }
+    })
+    public navigatorProps: NavigatorProps<T>;
 
-    @Prop(Array<T>, [], true)
+    @Compute((self: NavigatorView<T>): ScrollYProps => {
+        return {
+            size: self.list.length,
+            index: self.list.indexOf(self.active)
+        }
+    })
+    public scrollyProps: ScrollYProps;
+
+    @Compute((self: NavigatorView<T>) => self.iProps.list || [])
     public list: Array<T>;
 
-    /** 获取元素要显示的内容, 默认显示元素本身 */
-    @Prop(Function, (item: T) => item)
-    public getCaption: Function;
-
 }
+
+declare global {
+    type NavigatorViewProps<T> = NavigatorProps<T>;
+}
+
+$registry.buildAndRegist(ComponentType.NavigatorView);

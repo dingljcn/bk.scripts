@@ -1,5 +1,3 @@
-import { IComponent } from "core/entity";
-
 declare global {
     interface Window {
         /** rsa 的公钥/私钥 */
@@ -11,7 +9,7 @@ declare global {
         /** 创建 Vue 程序 */
         createVue(config: any, mountElement: string): any,
         /** 注册 Vue 组件 */
-        registVue(name: string, component: IComponent): any,
+        registVue(name: string, component: Vue): Vue,
         /** 判断是不是开发环境 */
         isDev(): boolean,
     }
@@ -52,12 +50,17 @@ declare global {
         groupBy(list: Array<any>, exp: string | Function): any,
         /** 创建一个正则表达式 */
         createRegExp(str: string | RegExp): RegExp,
-        /** 将 value 添加到 object 中的 fieldKey */
+        /** 将 value 添加到 object 中的 fieldKey(尾插) */
         pushToArrayInObject(object: object, fieldKey: string, value: any): object;
-        /** 周期性执行任务, 默认 30ms 一次 */
-        timer(conditionFunc: Function): void,
+        pushToArrayInObject(object: object, fieldKey: string, value: any, dontRepeat: boolean): object;
+        /** 将 value 添加到 object 中的 fieldKey(头插) */
+        unshiftToArrayInObject(object: object, fieldKey: string, value: any): object;
         /** 周期性执行任务 */
-        timer(conditionFunc: Function, time: number): void,
+        timer<T>(conditionFunc: Function): void,
+        timer<T>(conditionFunc: Function, time: number): void,
+        timer<T>(conditionFunc: Function, object: T): void,
+        /** 复制文字 */
+        copyTxt(text: string): void
     }
 }
 

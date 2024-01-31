@@ -1,27 +1,21 @@
-import { AbstractComponent, ComponentType } from "core/entity";
-import { Method, Mounted, Prop, Template } from "..";
+import { AbstractComponent, ComponentType } from "core";
 
-export class ScrollerX extends AbstractComponent {
+@Service(ScrollerX, ComponentType.ScrollerX, true)
+export default class ScrollerX extends AbstractComponent<ScrollXProps> {
 
-    @Mounted(ScrollerX, ComponentType.ScrollerX)
-    public mounted(): void {
-        this.vid = window.uuid(this.name);
-        this.emit('mounted', this.vid);
-    }
-
-    @Template
-    public template: string = `<div class="dinglj-v-row-scroll" :id="vid" :style="getStyle()">
+    @Template public template: string = `<div class="dinglj-v-row-scroll" :id="vid" :style="getStyle()">
         <slot></slot>
     </div>`;
 
-    @Prop(Number, 0)
+    /** 总个数 */
+    @Compute((self: ScrollerX) => self.iProps.size || 0)
     public size: number;
 
-    @Prop(Number, 0)
+    /** 当前下标 */
+    @Compute((self: ScrollerX) => self.iProps.index || 0)
     public index: number;
     
-    @Method
-    getStyle(): object {
+    @Method public getStyle(): object {
         return {
             'left': `-${ (this.index >= 0 && this.index < this.size) ? this.index : 0 }00%`,
             'width': `${ this.size }00%`
@@ -29,3 +23,15 @@ export class ScrollerX extends AbstractComponent {
     }
     
 }
+
+declare global {
+    /** 横向滚动面板相关参数 */
+    interface ScrollXProps {
+        /** 当前下标 */
+        index: number;
+        /** 总个数 */
+        size: number
+    }
+}
+
+$registry.buildAndRegist(ComponentType.ScrollerX);

@@ -6,6 +6,12 @@ class LangItem {
     }
 }
 
+declare global {
+    interface Window {
+        LangItem: any;
+    }
+}
+
 window.LangItem = LangItem;
 
 export default LangItem;

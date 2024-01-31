@@ -4,6 +4,12 @@ enum RsaConst {
     flag_split = '$DINGLJ-SPLIT-FLAG$',
 }
 
+declare global {
+    interface Window {
+        RsaConst: any;
+    }
+}
+
 window.RsaConst = RsaConst;
 
 export default RsaConst;

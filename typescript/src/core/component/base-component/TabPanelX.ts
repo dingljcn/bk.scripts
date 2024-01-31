@@ -1,21 +1,18 @@
-import { AbstractComponent, ComponentType } from "core/entity";
-import { Compute, Field, Method, Mounted, Prop, Template } from "..";
+import { AbstractComponent, ComponentType } from "core";
 
-export class TabPanelX<T> extends AbstractComponent {
+@Service(TabPanelX, ComponentType.TabPanelX, true)
+export default class TabPanelX<T> extends AbstractComponent<TabPanelProps<T>> {
 
-    @Mounted(TabPanelX, ComponentType.TabPanelX)
-    public mounted(): void {
-        this.vid = window.uuid(this.name);
-        this.emit('mounted', this.vid);
+    @Mounted public mounted(): void {
         if (Array.isArray(this.list) && this.list.length > 0) {
             this.clicked(this.list[0], 0);
         }
         /** 下一个 Tab 页事件 */
-        window.$queue.on('tab-panel:next', () => {
+        $queue.on('tab-panel:next', () => {
             const next = (this.index + 1 + this.list.length) % this.list.length;
             this.clicked(this.list[next], next);
         }, this.vid);
-        window.$queue.on('tab-panel:to', (to: T) => {
+        $queue.on('tab-panel:to', (to: T) => {
             const result = this.list.filter(item => JSON.stringify(item) == JSON.stringify(to));
             if (result.length > 0) {
                 this.clicked(result[0], this.list.indexOf(result[0]));
@@ -23,12 +20,11 @@ export class TabPanelX<T> extends AbstractComponent {
         }, this.vid);
     }
 
-    @Template
-    public template: string = `<div class="dinglj-v-tab-panel" :id="vid" v-if="list.length > 0">
+    @Template public template: string = `<div class="dinglj-v-tab-panel" :id="vid" v-if="list.length > 0">
         <div class="dinglj-v-tabpanel-title">
             <div class="dinglj-v-tab-float"></div>
             <div v-for="(item, idx) in list" :class="getClass(item)" :id="getId(idx)" @click="clicked(item, idx)">
-                {{ getCaption(item) }}
+                {{ getLabel(item) }}
             </div>
         </div>
         <div class="dinglj-v-tabpanel-view">
@@ -39,29 +35,28 @@ export class TabPanelX<T> extends AbstractComponent {
         <h1>未找到数据</h1>
     </div>`;
 
-    @Field
-    public value: T = null;
+    @Field public value: T = null;
 
-    @Method
-    public getClass(item: T): object {
+    @Method public getClass(item: T): object {
         return {
             'dinglj-v-tabpanel-item': true,
             'active': JSON.stringify(this.value) == JSON.stringify(item),
         };
     }
 
-    @Method
-    public getId(index: number): string {
+    @Method public getId(index: number): string {
         return `${ this.vid }-${ index }`;
     }
 
-    @Method
-    public clicked(item: T, index: number): void {
+    @Method public clicked(item: T, index: number): void {
         if (item == this.value) {
             return;
         }
         this.value = item;
-        this.emit('on-change', item);
+        this.iProps.onChange && this.iProps.onChange({
+            vid: this.vid,
+            value: item,
+        })
         setTimeout(() => {
             const floatElement = window.query(`#${ this.vid } .dinglj-v-tab-float`)[0];
             const element: HTMLElement = window.byId(this.getId(index));
@@ -72,18 +67,47 @@ export class TabPanelX<T> extends AbstractComponent {
         }, 50);
     }
 
-    @Compute(function(): number {
-        if (!this.list.includesIgnoreCase(this.value) && this.list.length > 0) {
-            this.clicked(this.list[0], 0);
+    @Compute((self: TabPanelX<T>) => {
+        if (!self.list.includesIgnoreCase(self.value) && self.list.length > 0) {
+            self.clicked(self.list[0], 0);
         }
-        return this.list.indexOf(this.value);
+        return self.list.indexOf(self.value);
     })
     public index: number;
 
-    @Prop(Array<T>, [], true)
+    @Compute((self: TabPanelX<T>) => {
+        if (!self.iProps.list) {
+            return [];
+        }
+        let stillExist = false;
+        for (let item of self.iProps.list) {
+            if (JSON.stringify(self.value) == JSON.stringify(item)) {
+                stillExist = true;
+                break;
+            }
+        }
+        if (!stillExist) {
+            self.clicked(self.iProps.list[0], 0);
+        }
+        return self.iProps.list;
+    })
     public list: Array<T>;
 
-    @Prop(Function, (item: T): any => item)
-    public getCaption: Function;
+    @Compute((self: TabPanelX<T>) => self.iProps.getLabel || ((item: T) => item))
+    public getLabel: Function;
 
 }
+
+declare global {
+    /** Tab 页面板相关参数 */
+    interface TabPanelProps<T> {
+        /** 要显示的 tab 页数组 */
+        list: Array<T>;
+        /** 获取要显示的 tab 页名称 */
+        getLabel?(item: T): string;
+        /** Tab 页切换事件 */
+        onChange?(args: EmitArgs<T>): void;
+    }
+}
+
+$registry.buildAndRegist(ComponentType.TabPanelX);

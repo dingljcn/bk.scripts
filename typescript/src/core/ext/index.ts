@@ -5,3 +5,6 @@ import './element';
 import './network';
 import './path';
 import './string';
+import './object';
+import './storage';
+import './date';
