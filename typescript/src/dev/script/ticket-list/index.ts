@@ -1,6 +1,7 @@
 import './encode-config';
 import { AbstractComponent, LangItem } from 'core';
 import { Ticket } from 'dev';
+import 'dev/util/ticket'
 import tifilter from './filter';
 
 const mainElement = window.byId('main');
