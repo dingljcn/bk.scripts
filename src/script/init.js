@@ -5,7 +5,7 @@ window.enableExcel = function() {
         return;
     }
     const script = document.createElement('script');
-    let pre = dinglj_home.replace(/(\\|\/)$/, '');
+    let pre = dinglj_home.decrypt().replace(/(\\|\/)$/, '');
     script.innerHTML = window.get(`${ pre }/src/xlsx.js`);
     document.head.appendChild(script);
     window.isEnableExcel = true;
