@@ -3,7 +3,8 @@ import { AbstractComponent, ComponentType } from "core";
 @Service(SwitchX, ComponentType.SwitchX, true)
 export default class SwitchX extends AbstractComponent<SwitchProps> {
 
-    @Template public template: string = `<div class="dinglj-v-switch" @click="onclicked" :style="getStyle()">
+    @Template public template: string = `<!-- 开关 -->
+    <div class="dinglj-v-switch" @click="onclicked" :style="getStyle()">
         <!-- 开关按钮前的文字 -->
         <div class="dinglj-v-switch-pre">
             {{ preText }}

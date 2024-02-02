@@ -4,16 +4,14 @@ import { AbstractComponent, ComponentType } from "core";
 export default class NavigatorView<T> extends AbstractComponent<NavigatorViewProps<T>> {
 
     @Template public template: string = `<div class="dinglj-v-navigator-view">
-        <!-- 左侧导航窗格 -->
         <i-navigator style="margin-right: 10px" :i-props="navigatorProps"></i-navigator>
         <!-- 右侧主要内容显示部分 -->
         <div class="dinglj-v-navigator-right">
             <!-- 主要内容前的插槽 -->
             <slot name="before"></slot>
             <div class="dinglj-v-navigator-content">
-            <!-- 主要内容部分用纵向滚动视图, 并提供插槽 -->
                 <i-scroller-y :i-props="scrollyProps">
-                    <slot name="content"></slot>
+                    <slot name="content" :active="active"></slot>
                 </i-scroller-y>
             </div>
             <!-- 主要内容后的插槽 -->

@@ -57,7 +57,7 @@ export class MetaData<T> extends BasicProperty<T> implements BuildInfo<T> {
         const instance = this.getInstance();
         const result: any = {
             getImg: function(path: string): string {
-                return window.mergePath('/src/assets/img/' + path);
+                return mergePath('/src/assets/img/' + path);
             },
             emit: function<T>(event: string, value: T): void {
                 this.$emit(event, {

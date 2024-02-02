@@ -1,11 +1,11 @@
 declare global {
     interface StorageUtils {
         /** 获取本地缓存 */
-        getStorage<T>(key: string): T,
-        getStorage<T>(key: string, _default: T): T,
+        getStorage<T>(key: string): T;
+        getStorage<T>(key: string, _default: T): T;
         /** 设置本地缓存 */
-        setStorage(key: string, value: any): void,
-        setStorage(key: string, value: any, timeout: number): void,
+        setStorage(key: string, value: any): void;
+        setStorage(key: string, value: any, timeout: number): void;
     }
     /** 本地缓存工具 */
     const $store: StorageUtils;

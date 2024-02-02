@@ -3,7 +3,8 @@ import { AbstractComponent, ComponentType } from "core";
 @Service(ButtonX, ComponentType.ButtonX, true)
 export default class ButtonX extends AbstractComponent<ButtonProps> {
 
-    @Template template: string = `<div :class="getClass()" :id="vid" :style="getStyle()" @click="$singleClick">
+    @Template template: string = `<!-- 按钮 -->
+    <div :class="getClass()" :id="vid" :style="getStyle()" @click="$singleClick">
         <slot></slot>
     </div>`;
 

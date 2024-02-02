@@ -2,8 +2,6 @@ import { RsaConst } from 'core';
 
 const encryptMap = {};
 
-const decryptMap = {};
-
 String.prototype.encrypt = function(publicKey: string = (() => {
     if (window.rsa == undefined) {
         alert('请更新脚本, 添加 rsa 密钥的配置');
@@ -27,36 +25,34 @@ String.prototype.encrypt = function(publicKey: string = (() => {
         }
     }
     $set(encryptMap, this, `${ result }${ RsaConst.flag_end }'`);
-    return $get(encryptMap, this);;
+    return $get(encryptMap, this);
 }
 
-String.prototype.decrypt = function(privateKey: string = (() => {
+const decode = window.toCache((str: string, privateKey: string = (() => {
     if (window.rsa == undefined) {
         alert('请更新脚本, 添加 rsa 密钥的配置');
         return '';
     }
     return window.rsa.pri;
-})()): string {
-    if ($get(decryptMap, this)) {
-        return $get(decryptMap, this);
-    }
-    let flag1 = this.startsWith(RsaConst.flag_start);
-    let flag2 = this.endsWith(RsaConst.flag_end);
+})()) => {
+    let flag1 = str.startsWith(RsaConst.flag_start);
+    let flag2 = str.endsWith(RsaConst.flag_end);
     if (flag1 != flag2) {
-        $set(decryptMap, this, this);
-        return this;
+        return str;
     }
     if (flag1) {
-        let tmp = this.replace(RsaConst.flag_start, '').replace(RsaConst.flag_end, '');
+        let tmp = str.replace(RsaConst.flag_start, '').replace(RsaConst.flag_end, '');
         let result = '';
         for (let oneOf of tmp.split(RsaConst.flag_split)) {
             result += $rsa.decrypt(oneOf, privateKey);
         }
-        $set(decryptMap, this, result);
         return result;
     }
-    $set(decryptMap, this, this);
-    return this;
+    return str;
+}, 'rsa-decode-map');
+
+String.prototype.decrypt = function(): string {
+    return decode(this);
 }
 
 String.prototype.equalsIgnoreCase = function(another) {

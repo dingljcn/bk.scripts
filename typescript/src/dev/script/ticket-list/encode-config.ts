@@ -1,7 +1,7 @@
 import { Ticket } from 'dev';
 
 if (!window.dinglj_home) {
-    window.dinglj_home = '$DINGLJ-ENCODE-START$BPkZyuNNyFIr6MTFTocoSxY7Nk2evl9PbbqI4Ro3ImSS86O22OSYPxMZSn9hjfryB5mRWzSCLx8YVcJ5Ujk20kpoXvZSEN9xfXY2QE0Wz5oNoZZ0V2qzo89B4eiCG2XOGAiNDnRiF97njHHrLKbLgqKn3bgDLbbUHE0t5wD+nXo=$DINGLJ-ENCODE-END$';
+    window.dinglj_home = '$DINGLJ-ENCODE-START$Wzt2l3B4drVxN5HCGr+/jtg7Cs8abo97RKZWQr747OhF0WhmLSpdoawxL+IjGSi15SnJXSCUPyxyWzeysFeIQXXcnWkUwAupvyw+tqQbFH7nVtW+wSblJZMwus3o3L87WEkw3YA9tLxY3vGHSk5D9Zudkj4ZzVY0a9KXty1lKzg=$DINGLJ-ENCODE-END$';
 }
 
 if (!window.readData) {
@@ -12,26 +12,31 @@ if (!window.readData) {
 
 window.encodeConfig = function(): any {
     return {
-        url: {
-            ticket: '$DINGLJ-ENCODE-START$au9ejj5OQK3ZtpK5SfLnxpMC/G0M/g1/SB2txoZtRe+9HW7vaSbzYOUAlX/Z5iy/MehanxkyW3kONif9eazqCkzRKrtVNe8D3EbCO5Giop7ZsJAzP8dA9mooSsOeYngJiSHm/QDubhVLe5GOttyFgwTP5BnqVVMHD3sl/BTqOsY=$DINGLJ-ENCODE-END$'
+        specialUrl: {
+            query: '$DINGLJ-ENCODE-START$GBt7YF6q8jNvUkNRfKuUYOqQlDVjGdr5JdOO9qjOFiQbNypS7MQne6cI0bvt75aqkrawnuouqTiaH7qnAK5qPN+KzX3ylZp/Ac7F3Udcj+vudHJFoPRkBbxtF1QZ8NXD9he3l62Pcmpumoo2BU3UJf2H8VQiqf3XW4dTSxI5dgE=$DINGLJ-ENCODE-END$',
+            flag: '$DINGLJ-ENCODE-START$OK82zDFFrT07ehfcK4gx6eatOLk5ul1WNx20ppeG0Zv8Xua0FpFgr6WqAxrdFo8xaf7gygHLw0sgulMCs0fCnPDU2xL8CPmSFvx4BofhTcGgJrHqbl3NN+1wDv25KRWQiM7eioChFXdmBeM/7rzoqfg2OiZsED/rUsuQCkWR90Y=$DINGLJ-ENCODE-END$',
+            columns: '$DINGLJ-ENCODE-START$lclT7G7V0bNVvZDhNE3Ce3D06JtdeqqonvsDyg8VEUq2YocE8OJWruD0WxjhithJxwilMAs9DYuzfr1pUqWzihtMvD0xrwHn/VOBg9UNI0j5aAJXgej57KUlqqPQp7Hav26ga/jcdvhM2ltpvzDEOQfFI+ek1lzVOOVOUm60f3E=$DINGLJ-SPLIT-FLAG$YwOslMC4EVijC8AeA0wZBSMtBjmey1PC7bcklUbVs4t4mTLLn1YReVXeqStofRB2QduY+1kxouUpFRFYbRTReGyiccCBbnifnIDLWTLAIT8kiVj7WfR3R9moU82RyvSvqDSetAJzIUKZ2dAamYutSiDiB1Js3LuDuLx4FtIlHVE=$DINGLJ-ENCODE-END$'
+        },
+        urls: {
+            ticket: '$DINGLJ-ENCODE-START$VHpev+dmnCrnvWGi0cymxPFhQfugBTrbliS1HWNn5fMn/23dGyC8M7DfAzMVwSYMi3oSr0LVTLhDXPfKFKSnO9lCYC+AD/wwf2pbuXR0Xkf+OLcx5bdhBITBZJ6vjsmxBaWuifG9C9kSp0WWKqIyeG25HTzPM+uG7IAb1MGm4KU=$DINGLJ-ENCODE-END$'
         },
         strategy: {
             groupBy: [
                 window.GroupStrategy((ticket: Ticket, fieldKey: TicketFields) => {
-                    if (ticket.get('$DINGLJ-ENCODE-START$fdrRwiyGDRnnI0D2+kSNpee+4aLSJcc6VJX+YsFwspn4WfvCvjqOF3ooaqSED2/9NqPLVB2dNbnrIMbk/TRMz8tGfoDqICQlYuCracV9CivU6mz6S/MvKkoPS3v9+J2UeVvqTZFYHg17/Xjjfql+8eEy/Buh53EjZcFMtzr+EOg=$DINGLJ-ENCODE-END$'.decrypt()) == '$DINGLJ-ENCODE-START$MaIFgs8JiOTFpjY+EXAoiS3QEg4z8jL0mTPnwNo+xX6K+4d/fSGJOsQOoglkFAQ7T8J/L0Rut+ka9Zac0VoXJwUqXNBbuNldKbcPTAyCTRQveuGrMTZ7Ewq4MApVMBl7ws/sA4qPBEeRz3PrCOQ4FrXtEX+4+SgiSNMWnP5sYCA=$DINGLJ-ENCODE-END$'.decrypt()) {
-                        return '$DINGLJ-ENCODE-START$JDvZ3ydyDKWxq/gVUWbp3q/Q8GgVd7SEPc5zXAIqcQpWAGmGlGen9FpZf8lVbTSa9lj26O/YdUsLERRdQeTyfVn3aTvuMF8cMbsp+XJaHvHHivGj/T1Y7qaEkDrPkAsXdWvctUk4BimsYFPLOj6StcU8d0YkxS2ijEjpWPDjEos=$DINGLJ-ENCODE-END$'.decrypt();
+                    if (ticket.get('$DINGLJ-ENCODE-START$fbVrkZ5XiMJ6DRm3oK3wGjvPCrz5qIm9fmXEUUISpcfLtAb9kEUlaUDzkKZXnRErdznonY0z3dlK0I2Mvess/AUWPexH4Z6CAYUD5aWN4crInDNXkv9cS0Y5YS8b2ivvYx9YxFZyrTt4uAntOHYVOI0uf5T8/P8+0cmUu92GJo4=$DINGLJ-ENCODE-END$'.decrypt()) == '$DINGLJ-ENCODE-START$M1+jlq/PGEAgYY1ZW6YDEwmJfMKEYilLLzrQuPh0TS5YLonUQt7Cuk1txf8UiR4Ngbsc64U3wTh6liIHGicwXeNq9F7wwbJ99Wr0RGn9W7opwydIV9AwtMhYw4uBeXY7EAxKT/uO0L1wt1vtOjVCvm8rMmTj0Q8E7ZooHnBUJto=$DINGLJ-ENCODE-END$'.decrypt()) {
+                        return '$DINGLJ-ENCODE-START$GFoy2WVQHp6UTf9pryoYQcYJ9ZD45hsjPTGKnUfd2X83oWyQe5Fh9/9/simcSncts7WqSWy1pAlKklOpYo0vTJCHo8b/+pAN/QIErIs6u/thQ15SrpQ1z1bKPKOZNVc9R0+KithFidH8zWUdFqLXk42QUlZBOOtSj/OYOBEn2JY=$DINGLJ-ENCODE-END$'.decrypt();
                     }
                     return '';
                 }),
             ],
             tabBy: [
-                window.TabPageStrategy(/.*/, '$DINGLJ-ENCODE-START$Qt30Ky2yJWqdmU/NYrr09W407aOg4PTmQ6wXxHXbiQ7jKGcQ6a4bqGIN4F89GxdXeb6qRg+OnUkPyfiadeYiALjAQfwNz5w9Q8tq/83bwEWb9HqajwzAgHRWlM3t7ee1N4JhMVexEQM62/NGw6cJocK8ygIZ9TvJD1qievIeYPA=$DINGLJ-ENCODE-END$'.decrypt(), '$DINGLJ-ENCODE-START$jwkgKvsJvBuSPcG5eKUPXX9YY5xi+7j2ZsI/kbEE2jHOx9rNlEP3EVrqvRTHsm6HuzI2kc5E8ClXEB1JG38KKGdtjnzDo3im5NjfHRE2kDaNP5S0Vs/0ZtPlvTbwy/66CGzrJWt+ZqdVoI00a5yfK6KedAlsFZuClqg8ZbSI9XI=$DINGLJ-ENCODE-END$'.decrypt(), '$DINGLJ-ENCODE-START$TXd106kiktSw3rSnrkYTJcPfk7vAvsdu7FyJJi7tkpnuOywSxpqyZg3UgRdsXMK8OeR/tzKG+J3aImlR6yPILLR4mjSIdlYxF9WgTPuIRW2rw7HQNjFe8q/o9au8hbc73CAz3UQQ3Zn6Qg4lvbVz16/ZHRnzJHcEbJFPmCqpzLs=$DINGLJ-ENCODE-END$'.decrypt()),
-                window.TabPageStrategy(new RegExp('$DINGLJ-ENCODE-START$ebOLBtGk6ms3sCFqcEBKAKhdRql4kHSw26QbrSv1DXcBQcfElAp8+cvsLL8sxkPTvpSAv3bmx0vxW1MRjjRhXpLeJnpgITKJW+uFT9fZSQSTuPgQtPtLCf6hVkZdHPhJY55Abvyw8b6Jhnkx3Ol/JNz/gBHgfc4yYYlfFFHLRE4=$DINGLJ-ENCODE-END$'.decrypt()), (groupName: string, ticket: Ticket) => {
-                    return '$DINGLJ-ENCODE-START$WqhVyo0cOyqM0a1YZQJXqHZX2w0AqCFljyAKlo34SCBCnMY4NfSWw6fzMjSZvhAd6jKyznBcAO7jFUGhOgea6UsdJimGVYvTbihVdCqEfCYlQnBmsv0dfCyxIaYI3+mrnOKF8HW1y4YUfXtRoMD6IBNQQ6X6z8q00huF7fpNhLM=$DINGLJ-ENCODE-END$'.decrypt();
+                window.TabPageStrategy(/.*/, '$DINGLJ-ENCODE-START$l7MkhWH08OUgLQKaefBfkFB9hSCY/988YI0mtuSj+Y0xjPkb0agSFcwYYoQ3PUcroC2X9e4zXMRl9jF35RdbfxDr0fw0m0iLrc0R8YAWwuJtG50e6/KtI5V6iDUiqsJLV0eQv/b3Xj+VDuhf/lpb7nJ021VJjh8kE540Kchejlo=$DINGLJ-ENCODE-END$'.decrypt(), '$DINGLJ-ENCODE-START$iTYDavyizODngJwywVQuqUPqd7TEX+UcWO3/EX3zkMGYAspFyOFptu4BDR2uciY2eV1BYUBLVPBlK2ZXNyNQelsPtCJJDrZkCFF8IaZo/uEeWxEiaVb/BrWkdLbFxrQTqEBnYWuZm88Xqf1aJNuoo7wp/lasksJneV7MF7b9tas=$DINGLJ-ENCODE-END$'.decrypt(), '$DINGLJ-ENCODE-START$XqDkAAKUjui279CMe43M51TyBweQ6prgnYvgwheovmuvZylm/GhvXn171A78UjPW2c0ST1Vuvhke6hBlGSMxVNXJas4l7GIJ3tyYLfcZYoSpAhIMfoIftC/10SGroqDNl62Eb46LEffvv532FY2PdJueDj0+4I6e1UHpEl+XyUE=$DINGLJ-ENCODE-END$'.decrypt()),
+                window.TabPageStrategy(new RegExp('$DINGLJ-ENCODE-START$kPOZgWBeth9T9GcD2rGJfT1DX5T20qION9YGbHbvIBCQP9xSDWG5a/0QBZsvmGJVpcRlTpuZxv5bJE7nFPaBPcRl2h51+/uJa8hW5xpgvAFuy2YKwNDuQ8KI2ufTBa1nn+Nr7M0osu/XUzeoOBDno7Rhma1UYNby4rHjMCCWmB0=$DINGLJ-ENCODE-END$'.decrypt()), (groupName: string, ticket: Ticket) => {
+                    return '$DINGLJ-ENCODE-START$mM3vLtl5gIvr9033RJx9R3nScyt1lmQSyP33Ez8mZGic46j81MTFy0dACHORdTNlll3YI7kNzcGBBOdZwl0cYfxLzLzSiFI5pWKjE/vbf/hYs6u5FtHu5evwyVa7sntScp4mX/Oy+Ysc6qq2m1CN4nOqfn8kM5/4NqWIQtIXcYk=$DINGLJ-ENCODE-END$'.decrypt();
                 }, true)
             ],
             colFilter: [
-                window.ColFilter(new RegExp('$DINGLJ-ENCODE-START$ipdcJCOKKQDVddHr77SryKqsk59Q0dwh8lWSK7ig3jM2Lojt19xauPqlOf8e+2XEKqOPR1rkxUsUncMZjFmLluiVQmPKCvQ3JdTMmf6QzqRy9I71ad9FwfywsLipr9XZDP5cDXT43nxKydUVWLKu6WvxRm5jHcWK73Tiq1ELTyw=$DINGLJ-ENCODE-END$'.decrypt()), /.*/, '$DINGLJ-ENCODE-START$ZzgngTgZ+kogHFsL6mK/ifUfexqKhtxUjSk4zrRxNTdOJEgOky3Sj9n40gV7MtJSUjthwx/ZV/XN4Q87jo3y4pMHWvJfqQySnLwTPTJ1YUE+IsXosAgnVSmCbNbuXbYmxOc0xfbOUtLmMm6tSenYPC5R0VkqgJ4VTGS/lOLHJ5g=$DINGLJ-ENCODE-END$'.decrypt()),
+                window.ColFilter(new RegExp('$DINGLJ-ENCODE-START$EiIP+QcT7F5DqFI9oyMlXFZ90Xj8nsCT//LnCu5nGyoS3jkr/OgJD8z8+KQ+QmfgJHpCAenJ1g6rghMpS/lZCnRTACicN5cjWMGH8L2f3keXIf76qR2/7V8myTxle/TWWNLoCqOgDWibsCf0CeAyjEkkEKJHYxs4Sa+3jASRjzY=$DINGLJ-ENCODE-END$'.decrypt()), /.*/, '$DINGLJ-ENCODE-START$iVFveqGruD5LrIvET/NO/ujn+PByQWHsnheYu47oQp6VkKfUyv4UPvSFUht0VJGZm2Z295hvV6MLmftazXhOfFpPMMSasYiDgV6B7naj0sfwPqBMfOC8eHC/TKvi+HkrAM6725B/FOTOgV1wWwuAVsbJGa1hNsTAaJUd1N7NISE=$DINGLJ-ENCODE-END$'.decrypt()),
                 window.ColFilter(/.*/, /.*/, (groupName: string, tabName: string, list: Array<Ticket>, column: TicketFields) => {
                     return list.filter(i => i.get(column).trim() != '').length == 0;
                 })
@@ -39,15 +44,15 @@ window.encodeConfig = function(): any {
             order: {
                 group: {
                     component: [
-                        '$DINGLJ-ENCODE-START$CfRFSGXaopgJi1I91cE5bEyVaQ5IXFU8ggpwFKmwEYjT2KsdIDHU0UCvkP2j3s0mjsUzQIeIGZibELw/jpNsi/6VCGCC7AoTfkCHLdKYqj9MWDP6DP4jq2AHlawXG7a6F6/6Yk33s8bgWNvuxpRvqzQnY8zfqSPHbCdjkH6eLNk=$DINGLJ-ENCODE-END$', 
-                        '$DINGLJ-ENCODE-START$CL+deGa2m29+1VtaVA/hgHKi+YFj8+KYB5AUDtP1zeNmhkSmnBuo23GZmGldA3XuR0GZ5XaXj7EReVpKuuiuTRuUOQFzuSo5b/QV3/O3PmdA2k6o9KxWT9OlO+hA//QfkNlrix0ImL8lL5LfHzz3cEh/XjVNHLp/9h0OULiyC4U=$DINGLJ-ENCODE-END$', 
-                        '$DINGLJ-ENCODE-START$EICe8MJfoqBfbaHvy5QfdtLRZhbaM5aRayqAO1ZW2XPn/SJ2H1g+kUk6IiFLyS34u9bUCyhG2e5nJCdCgt9rXatAJLY5LMM7soMPJzNjW5en8LzdVhYwmQJiYQnAobO7mI4vk6GrbT7h3nhiKMJyeGP5zAMtbbeoXdZ7iyl+mcg=$DINGLJ-ENCODE-END$', 
-                        '$DINGLJ-ENCODE-START$f/c7RM9wgZFOEFr+Ozw9pzaVJa/3F2uS5tKV1QgMLBl6aZugqwDIl6HOa3ekb4oEhsV5uHTeSciarW+l+CvcAdZ6O1OWq6726xZ4nUtq+QoYY4jPfuPrKgA5+9GOheMNK1tEJQirDEFn+sPWIAfvYPAd59TDd4rzbuFDEYb5/R8=$DINGLJ-ENCODE-END$', 
-                        '$DINGLJ-ENCODE-START$RuaZeDl8b5AWeG8aZF9KAuTM2Dxz22LdOGG86NnUM0WtbTcnni3bhAfbEnmWLKch0MZu5K7wOq1FFOO4lGjYl9WdT9RxcNDCgJrp69vY6jiZ1RUvslXKxXku+yoYOWxqm74NB93t8Oli/m+Sapdz97tELlTNEuApmU9bUbIdMMM=$DINGLJ-ENCODE-END$', 
-                        '$DINGLJ-ENCODE-START$GrjGYL1QkppyF1YsGfFgF/0JqhtkslbKUjXDHEJF7Sl1RnfmuR15ZXRNI6xRZn+PGeLX/D3zlLVPQDbqX2gqWFkaBNDek5bnyJoW0hWGd8xcqVdE/ze5AJ+lppSD7au5TxIDjgSGdrKeNeJBoyVGGSDW3Y5WeiolTX4tA/TJXOE=$DINGLJ-ENCODE-END$', 
-                        '$DINGLJ-ENCODE-START$LDTJUvXpolXp8B6mwG2s8Ni/ipSwinfRqV4AJ2Y9Rfh+3fTimkXezpDqBdyz5wSm1Bl1vOIGQv+5NaI2pMUqrhqxysZQdaJtzF6WKnznSKtS6NR4zuqrkX4kSrOvlR1wcbJzc0+9Uv16qzzxshp4KL3MVRkQgfCN1VR1MVafdow=$DINGLJ-ENCODE-END$', 
-                        '$DINGLJ-ENCODE-START$j60/hfV89rJJ/Iz82dceMifGLY8fdmUqllnLLuFxkp9zfjfpy8ordWXaKU6Gh+QYSFYVsa2A1XsijSoC5pv7/qxVNCigWq3rygr/l8/ZbMf1l1vYe4iuiHV4wJsMGBeZWUBzZ8rdTG+lpcc2NLeFOW7neXTYVKavfIdEBVjtb/k=$DINGLJ-ENCODE-END$', 
-                        '$DINGLJ-ENCODE-START$OjA/epIcYvlsHxGG6fNvHBC6wJvRd05Jd9sdgA4vCgX17QYYKXzyK+2kmZsSakkFWDQ9hEuqcnHSWA1yvcTWCitFQ3ir+dQK2gpUOniCf9eF7JKuDcPczzfkm4K92207boEz9vYhhckZfVIOn3A9aosKUfZHDguml3o0JaH91Ic=$DINGLJ-ENCODE-END$'
+                        '$DINGLJ-ENCODE-START$BtIGL4FYNjhO04Vf14+cT4UMoPVE4fdT0YgY1s0lXoOzLJyplSDfe+5xUsvlzI5DD+I1CXSv/TncmJtyQQo/ZFlyIrfrcH0cwtUSX+InMeBQXjtCpj78OKQ6U3X5eBXzgFDcEARGiOnMtAot8Gtw/C+cW8BqnMBGkyycX31S5MQ=$DINGLJ-ENCODE-END$', 
+                        '$DINGLJ-ENCODE-START$gbb+t1sbICKHjg+isxd90SBezbh3g8ZvD48p6Jv7qjj56eVKGf/K8W9FH+DINR6S1iBBPw7R+rHpDa/bIt4XXq4EfuyX6gym2zWDH2zzbFJenqVxRVIS6N85TGRl2T/CFQveGrKgHx4NqTGrtFUhjAaqyfMTeF0fBC6qQsNh1O0=$DINGLJ-ENCODE-END$', 
+                        '$DINGLJ-ENCODE-START$IX3JdlETICPFRQlcZVyWzQxTgpIg9RarkF//b//8G2ZZ6wUQ8SRsB6eSw3M8Zyg4bvqHPVnmxH5ZMuDRkyhRyL79pk9SeLLc+p/pDY7XM0NvvANP43M+WJa+UQJmyvM58O58hCANXo/G02cpDIHK0ps+e5WAszjlTbojkKvQ1ek=$DINGLJ-ENCODE-END$', 
+                        '$DINGLJ-ENCODE-START$JKwM9Z5D/E1Y62H5zQDPmTf7HXJAvndRlaEblvYzxsTiz68uLCluwyIv+tTt1vO9Bq60bZySqQwV2U7NeW3Kjzm9XT8s3FgO6nfrMxDhAp3VhizSiaLzweuXUfyrPJettOfSLIlqtGNFqTQqTnpZL/toe0A1oOyGq5UnWnmzZy8=$DINGLJ-ENCODE-END$', 
+                        '$DINGLJ-ENCODE-START$P/qR/BHI9w6DRiYJzSon/aWAEy+xWQn/yfuEsZ3GtzbneLz1P4HWgVxN1Q0yVsTzPgH4kifHMVjFjcfVNblPTbkIGLiJzj+c04JWbhF2xLrSgbVqpp8WcQiVQvAf93STwqabxhN7sBIOXLxaGB3ZfsB2VeYr4LuwwwNat0ewljc=$DINGLJ-ENCODE-END$', 
+                        '$DINGLJ-ENCODE-START$LjiUYJEmy8tj9f6UbFtqA9ggTOZf5KkB/1dNOVmnGn9a/SoMCXIfESSgt0P81wQ4tY13c3Xh+abVdNMOgF5AuLIegfP+SmU7i8KkdFXtTYMf+J/KKH+IhdoGGxdLGlh5IF1tB8kLr4dRxTWkF6RQo5DQN7Eq2LAHB6dM04jf6mQ=$DINGLJ-ENCODE-END$', 
+                        '$DINGLJ-ENCODE-START$f0+5B3nDoBmtl6m0hHXemgjSLG+Mx2M2iiym8QvqL9NvDIsHPvq4AKAsqA9zkCG0PBbIY9c5TlOOKMslChZ+cNRWFNCCsZaVXDmgmmr2rn4ha7F3H2YiSNuWGtoh4CuLkTc9Npmwk/W8ZCukdd90ZFgogIbz32IG/Xv8iGrPojs=$DINGLJ-ENCODE-END$', 
+                        '$DINGLJ-ENCODE-START$ACQfoDZylGPQpt8e2Gwby6YT7OWdaSj8ItBgGIxOkBoRRig1MRGAu50UMRmS4coKbpYg1hrkOMNl2vDf/HbPfFol087cTQ15YxF0sao+pwdktn2B8LOpIWruCt1zJkEeglvE2WeDjvJOIFTVbJz3YDw3YT+AGA2e1lGlmKfu4PU=$DINGLJ-ENCODE-END$', 
+                        '$DINGLJ-ENCODE-START$g+9CFzzueDsvDIG6yHqubMyj3NhKj7MlwgZfiRwc4EMND+GYlWzCPrtGm+J3YerQL8zRTRKh0tnhLXbPKYCOzmdZPo6UfguXD4n89hkcnUXBkjOT8CVYMfvWO3WpGID/jYE/JRNZlg2HBfFAgE1y8ONcN+20elO3HpWk6yFUgR0=$DINGLJ-ENCODE-END$'
                     ],
                 }
             },

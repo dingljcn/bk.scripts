@@ -3,7 +3,7 @@ import { Ticket } from "./Ticket";
 export class OrderTicket {
     groupRegExp: RegExp;
     tabRegExp: RegExp;
-    fieldKey: string;
+    fieldKey: TicketFields;
     expectValue: Array<any>;
     func: Function;
     exec(groupName: string, tabName: string, ticket1: Ticket, ticket2: Ticket) {
@@ -11,13 +11,13 @@ export class OrderTicket {
             if (this.func) {
                 return this.func(groupName, tabName, ticket1, ticket2);
             } else {
-                return window.compareStringByArray(this.expectValue, ticket1.get(this.fieldKey as any), ticket2.get(this.fieldKey as any));
+                return this.expectValue.compareBy(ticket1.get(this.fieldKey), ticket2.get(this.fieldKey));
             }
         }
     }
 }
 
-window.defunc('OrderTicket', (groupRegExp: RegExp, tabRegExp: RegExp, fieldKey: string, expectValue: any) => {
+window.defunc('OrderTicket', (groupRegExp: RegExp, tabRegExp: RegExp, fieldKey: TicketFields, expectValue: any) => {
     let result = new OrderTicket();
     result.groupRegExp = groupRegExp;
     result.tabRegExp = tabRegExp;

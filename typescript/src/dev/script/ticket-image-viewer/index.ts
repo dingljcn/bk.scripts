@@ -1,11 +1,12 @@
 import './encode-config';
 import { AbstractComponent, RightMenu } from 'core';
-import { isMatch } from './tool';
+import 'dev';
+import './tool';
 import ivline from './line';
 import ivstep from './step';
 import ivhistory from './history';
 
-if (isMatch()) {
+if (window.isMatch()) {
     window.linkCss('/src/script/ticket-image-viewer/index.css');
     window.document.body.innerHTML = `<div id="dinglj-main">
         <div id="iv-toolbar">
@@ -143,7 +144,7 @@ export class App extends AbstractComponent<any> {
 
     /** 切换面板 */
     @Method public changePanel(direction: MoveDirection) {
-        const panels = window.getConfigOrDefault(this.config, this.defaultConfig, 'panels', []);
+        const panels = window.getConfigOrDefault('panels', []);
         const index = panels.indexOfIgnoreCase(this.arrow);
         const target = (index + panels.length + direction) % panels.length;
         this.arrow = panels[target];
@@ -158,7 +159,7 @@ export class App extends AbstractComponent<any> {
     }
 
     @Method public getHotKey(key: HotKeyType): string {
-        const hotKey: any = window.getConfigOrDefault(this.config, this.defaultConfig, 'hotKey', {});
+        const hotKey: any = window.getConfigOrDefault('hotKey', {});
         return `(${ hotKey[key] })`;
     }
 
@@ -192,14 +193,6 @@ export class App extends AbstractComponent<any> {
         }
     })
     public tabViewProps: TabPanelProps<string>;
-    
-    /** 获取用户配置 */
-    @Compute(window.readConfig)
-    public config: any;
-
-    /** 获取脚本设置的默认配置 */
-    @Compute(window.defaultConfig)
-    public defaultConfig: any;
 
     @Compute((self: App) => {
         const result = [];

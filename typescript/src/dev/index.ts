@@ -22,3 +22,18 @@ declare global {
         $ticket: TicketUtils
     }
 }
+
+if (!window.isMatch || window.isMatch()) {
+    Window.prototype.$systemConfig = window.toCache(() => {
+        return $rsa.decryptObject(window.encodeConfig());
+    }, 'dinglj-system-config')('dinglj-system-config');
+    Window.prototype.$userConfig = window.toCache(() => {
+        return window.readConfig();
+    }, 'dinglj-user-config')('dinglj-user-config');
+    window.linkCss("/src/assets/css/contextmenu.css");
+    window.linkCss("/src/assets/css/common.css");
+    window.linkCss("/src/assets/css/form.css");
+    window.linkCss("/src/assets/css/tip.css");
+    window.linkCss("/src/assets/css/layout.css");
+    window.linkCss("/src/assets/css/modal.css");
+}

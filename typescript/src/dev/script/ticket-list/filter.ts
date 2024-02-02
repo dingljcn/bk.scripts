@@ -19,9 +19,9 @@ export class TI_Filter extends AbstractComponent<any> {
 
     @Method public getComboData(column: TicketFields) {
         const result = Array.from(new Set(this.data.map(i => i.get(column))));
-        const order = window.getConfigOrDefault(this.config, this.defaultConfig, `strategy.order.group.${ column }`, [], false);
+        const order = window.getConfigOrDefault(`strategy.order.group.${ column }`, [], false);
         result.sort((s1, s2) => {
-            return window.compareStringByArray(order, s1, s2);
+            return order.compareBy(s1, s2);
         })
         return result;
     }
@@ -94,12 +94,6 @@ export class TI_Filter extends AbstractComponent<any> {
         };
     })
     public componentProp: ComboProps<string>;
-
-    @Compute(window.$ticket.config)
-    public config: any;
-
-    @Compute(window.$ticket.defaultConfig)
-    public defaultConfig: any;
 
     @Prop(Array, [], true)
     public data: Array<Ticket>;

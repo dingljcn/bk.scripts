@@ -13,8 +13,10 @@ export default class InputX extends AbstractComponent<InputProps> {
         this.value = this.iProps.defaultValue || '';
     }
 
-    @Template public template: string = `<div class="dinglj-v-ctl dinglj-v-input text" :caption="$caption" :style="getStyle()" :id="vid">
+    @Template public template: string = `<!-- 文本输入框 -->
+    <div class="dinglj-v-ctl dinglj-v-input text" :caption="$caption" :style="getStyle()" :id="vid">
         <input type="text" :placeholder="$placeholder" v-model="value" @keyup.enter="setValue(value, 'enter')" @input="setValue(value, 'input')" @blur="setValue(value, 'blur')" @change="setValue(value, 'change')"/>
+        <!-- 文本输入框清空按钮 -->
         <img :src="getImg('delete.png')" class="clean" @click="setValue('', 'change')"/>
     </div>`
 

@@ -18,7 +18,7 @@ $queue.sendMsg = function(event: string, data: any, elementId: string = ''): voi
             result.push(fun(data));
         }
     } else {
-        window.pushToArrayInObject($queue.eventQueue, key, data);
+        pushToArray($queue.eventQueue, key, data);
     }
 }
 
@@ -27,7 +27,7 @@ $queue.on = function(event: string, func: Function, elementId: string = ''): voi
     if (elementId) {
         key = `${ event }:${ elementId }`;
     }
-    window.pushToArrayInObject($queue.eventPool, key, func);
+    pushToArray($queue.eventPool, key, func);
     const events = $queue.eventQueue[key];
     if (Array.isArray(key)) {
         for (let data of events) {

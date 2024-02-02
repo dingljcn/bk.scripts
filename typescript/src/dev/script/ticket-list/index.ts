@@ -8,6 +8,7 @@ const mainElement = window.byId('main');
 
 if (mainElement) {
     window.linkCss('/src/script/ticket-list/index.css');
+    window.byId('footer') && window.byId('footer').remove()
     for (let element of mainElement.children) {
         element.style.display = 'none';
     };
@@ -16,9 +17,13 @@ if (mainElement) {
             <template v-slot:before>
                 <tifilter :data="originData" @on-change="emit => filter = emit.value"></tifilter>
             </template>
-            <template class="result-view" v-slot:content>
+            <template class="result-view" #content="{ active }">
                 <i-tab-view v-for="groupName in groupNames" :i-props="genTabViewProps(groupName)">
-                    <i-table v-for="tabName in tabNames(groupName)" :i-props="genTableProps(groupName, tabName)"></i-table>
+                    <template v-for="(tabName, idx) in tabNames(groupName)">
+                        <div style="width: 100%; overflow: hidden">
+                            <i-table v-if="active == groupName || idx == 0" :i-props="genTableProps(groupName, tabName)"></i-table>
+                        </div>
+                    </template>
                 </i-tab-view>
                 <i-modal :i-props="modalProps">
                     <template v-slot:title>
@@ -56,10 +61,10 @@ export class App extends AbstractComponent<any> implements TicketApp {
             let msg = `你有 ${ list.length } 个新变更, 注意查收<div style="margin-top: 10px; display: flex">
             <div style="flex: 1"></div>
                 <div style="margin-left: 5px; font-weight: bold; color: var(--theme-color); cursor: pointer" onclick="${
-                    list.map(t => `$ticket.openTicketById('${ t }');`).join('')
+                    list.map(t => `$ticket.openTicket(window.displayData(), '${ t }');`).join('')
                 }">全部打开</div>
                 <div style="margin-left: 10px; font-weight: bold; color: var(--theme-color); cursor: pointer" onclick="${
-                    (list.map(t => `$ticket.setOpended('${ t }');`).join('')) + "'已全部标记'.info()"
+                    (list.map(t => `$ticket.setOpended(window.displayData(), '${ t }');`).join('')) + "'已全部标记'.info()"
                 }">全部标记为已读</div>
             </div>`;
             msg.info(5000);
@@ -75,16 +80,13 @@ export class App extends AbstractComponent<any> implements TicketApp {
 
     @Field public filter: any = {};
 
-    @Field public tops: Array<string> = [];
+    @Field public tops: Array<string> = null;
     
-    @Field public newTickets: Array<string> = [];
+    @Field public newTickets: Array<string> = null;
     
-    @Field public myTickets: Array<string> = [];
+    @Field public myTickets: Array<string> = null;
     
-    @Field public localStorage: TicketStorageInfo = {
-        topTickets: [],
-        myTickets: [],
-    };
+    @Field public localStorage: TicketStorageInfo = null;
 
     @Field public modal: TicketModal = {
         ticket: null,
@@ -157,23 +159,24 @@ export class App extends AbstractComponent<any> implements TicketApp {
     })
     public modalProps: ModalProps;
 
-    @Compute($ticket.config)
-    public config: any;
-
-    @Compute($ticket.defaultConfig)
-    public defaultConfig: any;
-
     @Compute((self: App) => {
-        const regExp = /[?&]group=([a-zA-Z0-9]+)[?&]?/;
+        let regExp = /[?&]group=([a-zA-Z0-9]+)[?&]?/;
         let defaultValue = '';
         if(regExp.test(window.location.href)) {
             defaultValue = (regExp.exec(window.location.href))[1]; // url 参数
         }
-        const defaultColumns = ['component', 'owner', 'status']; // 如果既没有配置, 也没有 url 参数, 则从这里面选一个存在的
-        let firstLevel = window.getConfigOrDefault(self.config, self.defaultConfig, 'groupBy', defaultValue, true);
-        if (firstLevel && !defaultColumns.includesIgnoreCase(firstLevel)) {
-            defaultColumns.unshift(firstLevel);
+        if (!defaultValue) {
+            regExp = /[?&]groupby=([a-zA-Z0-9]+)[?&]?/
+            if(regExp.test(window.location.href)) {
+                defaultValue = (regExp.exec(window.location.href))[1]; // url 参数
+            }
         }
+        const defaultColumns = ['component', 'owner', 'status']; // 如果既没有配置, 也没有 url 参数, 则从这里面选一个存在的
+        let firstLevel = window.getConfigOrDefault('groupBy', defaultValue, true);
+        if (defaultColumns.includesIgnoreCase(firstLevel)) {
+            defaultColumns.remove(firstLevel);
+        }
+        defaultColumns.unshift(firstLevel);
         for (let tmp of defaultColumns) {
             if (Object.keys(self.originData[0]).includesIgnoreCase(tmp)) {
                 return tmp;
@@ -182,10 +185,7 @@ export class App extends AbstractComponent<any> implements TicketApp {
     })
     public groupColumn: string;
 
-    @Compute(() => {
-        let htmlData = window.isDev() ? window.readData() : '';
-        return $ticket.readTicket(htmlData);
-    })
+    @Compute($ticket.readTicket)
     public originData: Array<Ticket>;
 
     @Compute((self: App) => {
@@ -210,7 +210,7 @@ export class App extends AbstractComponent<any> implements TicketApp {
     @Compute((self: App) => $ticket.groupNames(self))
     public groupNames: any;
 
-    @Compute((self: App) =>  window.getConfigOrDefault(self.config, self.defaultConfig, 'urls.ticket', ''))
+    @Compute((self: App) =>  window.getConfigOrDefault('urls.ticket', ''))
     public ticketURL: string;
 
 }

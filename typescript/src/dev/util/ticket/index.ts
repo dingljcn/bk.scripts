@@ -3,23 +3,82 @@ import { Ticket } from "dev";
 
 window.$ticket = {} as any;
 
-const config: any = window.readConfig();
-
-const defaultConfig: any = window.defaultConfig();
-
-$ticket.config = function(): any {
-    return window.readConfig();
-}
-
-$ticket.defaultConfig = function(): any {
-    return window.defaultConfig();
-}
-
 $ticket.whoami = function(): any {
-    return window.getVal(config, 'whoami.zh', '', true);
+    return window.getVal($userConfig, 'whoami.zh', '', true);
 }
 
-$ticket.readTicket = function(htmlData: string = ''): Array<Ticket> {
+const cacheString = function(fn: Function): Function {
+    const cache: any = {};
+    return function(str: string): any {
+        return cache[str] || (cache[str] = fn(str));
+    }
+}
+
+$ticket.urlArgs = (cacheString((str: string) => {
+    const result: any = {};
+    const arrayifys = ['user', 'status', 'column'];
+    const startIdx = window.location.href.indexOf('?');
+    const search = window.location.href.substring(startIdx + 1);
+    for (const kv of search.split('&')) {
+        if (!kv.trim()) {
+            continue;
+        }
+        const splitIdx = kv.indexOf('=');
+        if (splitIdx >= 0) {
+            const key = kv.substring(0, splitIdx);
+            const value = kv.substring(splitIdx + 1);
+            result[key] = arrayifys.includes(key.toLowerCase()) ? value.split(',') : value;
+        }
+    }
+    return result;
+}))('url-args');
+
+$ticket.queryTicket = function() {
+    if (window.isDev()) {
+        return window.readData();
+    }
+    const flag = window.getVal($systemConfig, 'specialUrl.flag', '');
+    if (flag && window.location.href.includes(flag)) {
+        if (!$ticket.urlArgs.user) {
+            '请至少指定一个用户'.err();
+            return;
+        }
+        let status = '';
+        if ($ticket.urlArgs.status) {
+            status = $ticket.urlArgs.status.map(s => `status=${ s }`).join('&');
+        }
+        const considerFields = ['owner', 'reporter', 'cc'];
+        let urlParam = considerFields.map(f => {
+            let fields = $ticket.urlArgs.user.map(o => `${ f }=${ o }`).join('&');
+            return status ? `${ fields }&${ status }` : fields;
+        }).join('&or&');
+        if ($ticket.urlArgs.groupby) {
+            urlParam += `&group=${ $ticket.urlArgs.groupby }`;
+        }
+        if ($ticket.urlArgs.max) {
+            urlParam += `&max=${ $ticket.urlArgs.max }`;
+        } else {
+            urlParam += `&max=10000`;
+        }
+        if ($ticket.urlArgs.column) {
+            if ($ticket.urlArgs.column[0] == 'all') {
+                urlParam += '&' + window.getVal($systemConfig, 'specialUrl.columns', '').split(',').map(c => `col=${ c }`).join('&');
+            } else {
+                urlParam += '&' + $ticket.urlArgs.column.map(c => `col=${ c }`).join('&');
+            }
+        } else {
+            urlParam += '&' + window.getVal($systemConfig, 'specialUrl.columns', '').split(',').map(c => `col=${ c }`).join('&');
+        }
+        const queryUrl = window.getVal($systemConfig, 'specialUrl.query', '');
+        if (queryUrl) {
+            return $net.get(`${ queryUrl }?${ urlParam }`);
+        }
+    }
+    return '';
+}
+
+$ticket.readTicket = function(): Array<Ticket> {
+    const htmlData = $ticket.queryTicket();
     const result: Array<Ticket> = [];
     let _document = window.document;
     if (htmlData.trim()) {
@@ -50,10 +109,10 @@ $ticket.getCellValue = function(vue: TicketApp, ticket: Ticket, col: LangItem | 
 $ticket.getSummary = function(vue: TicketApp, ticket: Ticket): string {
     let html = '';
     if ($ticket.getNewTickets(vue).includes(ticket.get('id'))) {
-        html += '<span class="ticket-list-new-ticket">[new]</span>';
+        html += '<span class="ticket-list-new-ticket">new</span>';
     }
     if ($ticket.getTops(vue).includes(ticket.get('id'))) {
-        html += '<span class="ticket-list-top-ticket">[top]</span>';
+        html += '<span class="ticket-list-top-ticket">top</span>';
     }
     html += `<span title="${ ticket.get('summary') }">${ ticket.get('summary') }</span>`;
     return html;
@@ -196,14 +255,15 @@ $ticket.openTicket = function(vue: TicketApp, target: string | HTMLElement): voi
             checkBox.checked = true;
         }
     }
-    setOpended(vue, ticketId);
-    let baseUrl = window.getConfigOrDefault(config, defaultConfig, 'urls.ticket', '', false);
+    $ticket.setOpended(vue, ticketId);
+    let baseUrl = window.getConfigOrDefault('urls.ticket', '', false);
     if (!baseUrl.endsWith('/')) {
         baseUrl += '/';
     }
     window.open(baseUrl + ticketId);
 }
-export function setOpended(vue: TicketApp, target: string): boolean {
+
+$ticket.setOpended = function(vue: TicketApp, target: string): boolean {
     const ticketId = $ticket.toTicketId(target);
     const ticket = $ticket.getTicketById(vue, ticketId);
     if (ticket.get('owner') == $ticket.whoami() && $ticket.getNewTickets(vue).includes(`#${ ticketId }`)) {
@@ -233,7 +293,7 @@ $ticket.setUnOpen = function(vue: TicketApp, target: string): boolean {
 
 $ticket.getTicketById = function(vue: TicketApp, target: string): Ticket {
     const ticketId = $ticket.toTicketId(target);
-    const result = vue.originData.getIfExist('id', `#${ ticketId }`);
+    const result = vue.originData.getIfExistByKey('id', `#${ ticketId }`);
     return result && result.length ? result[0] : null;
 }
 
@@ -285,6 +345,12 @@ $ticket.lineMenu = function(vue: TicketApp): Array<RightMenu> {
         }, function(ticket: Ticket, element: HTMLElement) {
             return !$ticket.isTop(vue, ticket.get('id'));
         }),
+        new RightMenu('取消置顶', function(ticket: Ticket, element: HTMLElement) {
+            $ticket.cancelTop(vue, ticket.get('id'));
+            `${ ticket.get('id') } 已取消置顶`.info();
+        }, function(ticket: Ticket, element: HTMLElement) {
+            return $ticket.isTop(vue, ticket.get('id'));
+        }),
         new RightMenu('标记为已读', function(ticket: Ticket, element: HTMLElement) {
             if ($ticket.setOpended(vue, element.innerText)) {
                 `${ ticket.get('id') } 已标记为已读`.info();
@@ -331,7 +397,7 @@ $ticket.titleColMenu = function(vue: TicketApp): Array<RightMenu> {
             vue.sort.columnKey = null;
         }),
         new RightMenu('导出', function(data: TableColumn<Ticket>, element: HTMLElement): void {
-            exportToExcel(data.list, element.parentElement);
+            exportToExcel(data.list, element.parentElement.parentElement);
         }),
     ]
 }
@@ -387,14 +453,14 @@ $ticket.groupData = function(vue: TicketApp): any {
     } else {
         '未找到任何用于分组的配置'.err();
     }
-    const strategyList = window.getConfigOrDefault(config, defaultConfig, 'strategy.groupBy', []);
+    const strategyList = window.getConfigOrDefault('strategy.groupBy', []);
     for (let ticket of vue.filterData) {
         for (let fieldKey of Ticket.fieldNames) {
             for (let idx = strategyList.length - 1; idx >= 0; idx--) {
                 let groupName = strategyList[idx].exec(ticket, fieldKey);
                 if (groupName) {
                     if (!result[groupName] || !result[groupName].includes(ticket)) {
-                        window.unshiftToArrayInObject(result, groupName, ticket);
+                        unshiftToArray(result, groupName, ticket);
                     }
                 }
             }
@@ -408,9 +474,9 @@ $ticket.groupNames = function(vue: TicketApp): Array<string> {
         return [];
     }
     const result = Object.keys(vue.groupData); // 所有分组名
-    const order = window.getConfigOrDefault(config, defaultConfig, 'strategy.order.group', {}, false); // 获取排序规则
+    const order = window.getConfigOrDefault('strategy.order.group', {}, false); // 获取排序规则
     result.sort((o1, o2) => {
-        return window.compareStringByArray($get(order, vue.groupColumn), o1, o2);
+        return $get<Array<string>>(order, vue.groupColumn).compareBy(o1, o2);
     })
     return result;
 }
@@ -422,8 +488,8 @@ $ticket.tabData = function(vue: TicketApp, groupName: string): any {
     if (!groupData || groupData.length == 0) {
         return result;
     }
-    const tabStrategys = window.getConfigOrDefault(config, defaultConfig, 'strategy.tabBy', []);
-    const rowFilters = window.getConfigOrDefault(config, defaultConfig, 'strategy.rowFilter', []);
+    const tabStrategys = window.getConfigOrDefault('strategy.tabBy', []);
+    const rowFilters = window.getConfigOrDefault('strategy.rowFilter', []);
     // 遍历每一个 Tab 页策略
     for (let tabStrategy of tabStrategys) {
         // 根据规则, 将所有符合规则的变更找出来
@@ -439,13 +505,13 @@ $ticket.tabData = function(vue: TicketApp, groupName: string): any {
                     }
                 }
                 if (!ignore) {
-                    window.pushToArrayInObject(result, tmpName, ticket, true);
+                    pushToArray(result, tmpName, ticket, true);
                 }
             }
         }
     }
     // 这样就得到了该 tab 页下所有的变更, 然后对变更进行排序
-    const orderStrategys = window.getConfigOrDefault(config, defaultConfig, 'strategy.order.ticket', []);
+    const orderStrategys = window.getConfigOrDefault('strategy.order.ticket', []);
     for (let tabName of Object.keys(result)) {
         result[tabName].sort((t1: Ticket, t2: Ticket) => {
             let isTop1 = $ticket.isTop(vue, t1.get('id'));
@@ -504,7 +570,7 @@ $ticket.columnsToDisplay = function(vue: TicketApp, groupName: string, tabName: 
         return [];
     }
     let columnKeys = [];
-    const filters = window.getConfigOrDefault(config, defaultConfig, 'strategy.colFilter', []);
+    const filters = window.getConfigOrDefault('strategy.colFilter', []);
     // 根据列的过滤策略进行过滤
     for (let column of Ticket.fieldNames) {
         let ignore = false;

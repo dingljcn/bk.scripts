@@ -8,8 +8,11 @@ export default class ModalX extends AbstractComponent<ModalProps> {
     }
 
     @Template public template: string = `<teleport to="body" v-if="display">
+        <!-- 对话框这招背景遮罩 -->
         <div class="dinglj-v-modal-mask"></div>
+        <!-- 对话框 -->
         <div class="dinglj-v-modal" :id="vid" @mousemove="moveXY" :style="getStyle()">
+            <!-- 标题 -->
             <div class="dinglj-v-modal-title" @mousedown="recordXY">
                 <div class="dinglj-v-modal-title-name dinglj-v-auto-hidden">
                     <slot name="title">对话框</slot>
@@ -19,9 +22,11 @@ export default class ModalX extends AbstractComponent<ModalProps> {
                     <img @click="closeModal()" :src="getImg('delete.png')" class="dinglj-v-close-modal"/>
                 </div>
             </div>
+            <!-- 内容 -->
             <div class="dinglj-v-modal-content">
                 <slot name="content"></slot>
             </div>
+            <!-- 按钮 -->
             <div class="dinglj-v-modal-btns">
                 <div class="dinglj-v-flex"></div>
                 <i-button style="margin-right: 5px;" :i-props="cancelProps">取消</i-button>

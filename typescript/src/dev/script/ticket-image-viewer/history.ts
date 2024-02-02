@@ -11,7 +11,7 @@ export class AppHistory extends AbstractComponent<any> {
     }
 
     @Template
-    public template: string = `<div id="history-container" class="right-panel" @click="changePanel">{{arrow}}
+    public template: string = `<div id="history-container" class="right-panel" @click="changePanel">
         <div :class="containerClass">
             <div :title="historyNumber" :class="itemClass(idx)" v-for="(historyNumber, idx) of list" @click="setIdx(idx)">
                 {{ historyNumber.substring(2).replace(/\.png/, '') }}

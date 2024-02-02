@@ -3,10 +3,14 @@ import { AbstractComponent, ComponentType } from "core";
 @Service(ComboX, ComponentType.ComboX, true)
 export default class ComboX<T> extends AbstractComponent<ComboProps<T>> {
 
-    @Template public template: string = `<div class="dinglj-v-ctl dinglj-v-input combo" :style="getStyle()" :caption="$caption" :id="vid">
+    @Template public template: string = `<!-- 下拉框 -->
+    <div class="dinglj-v-ctl dinglj-v-input combo" :style="getStyle()" :caption="$caption" :id="vid">
         <input :placeholder="$placeholder" type="text" :value="$list.includesIgnoreCase(value) ? $getValue(value) : ''"/>
+        <!-- 下拉框清空按钮 -->
         <img :src="getImg('delete.png')" class="clean" @click="setValue('')"/>
+        <!-- 下拉框选项集合 -->
         <div class="dinglj-v-combo-selections">
+            <!-- 下拉框选项 -->
             <div class="dinglj-v-combo-selection" v-for="item in $list" @click="setValue(item)">
                 {{ $getLabel(item) }}
             </div>

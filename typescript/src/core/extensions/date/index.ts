@@ -1,29 +1,29 @@
-Date.prototype.$setMinute = function(num: number): Date {
+Date.prototype.$setMinute = function(num) {
     this.setMinutes(this.getMinutes() + num);
     return this;
 }
 
-Date.prototype.$setHour = function(num: number): Date {
+Date.prototype.$setHour = function(num) {
     this.setHours(this.getHours() + num);
     return this;
 }
 
-Date.prototype.$setDate = function(num: number): Date {
+Date.prototype.$setDate = function(num) {
     this.setDate(this.getDate() + num);
     return this;
 }
 
-Date.prototype.$setMonth = function(num: number): Date {
+Date.prototype.$setMonth = function(num) {
     this.setMonth(this.getMonth() + num);
     return this;
 }
 
-Date.prototype.$setYear = function(num: number): Date {
+Date.prototype.$setYear = function(num) {
     this.setYear(this.getYear() + num);
     return this;
 }
 
-Date.prototype.$format = function(format: string = 'yyyy-MM-dd HH:mm:ss'): string {
+Date.prototype.$format = function(format: string = 'yyyy-MM-dd HH:mm:ss') {
     return format
         .replace(/yyyy/, `${ this.getFullYear() }`)
         .replace(/yy/, `${ this.getFullYear() % 100 }`)

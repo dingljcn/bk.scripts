@@ -9,7 +9,9 @@ declare global {
         /** 删除元素 */
         remove(element: T): boolean;
         /** 根据属性查找元素, 如果存在则返回 */
-        getIfExist(key: string, expectValue: any): Array<T>;
+        getIfExistByKey(key: string, expectValue: any): Array<T>;
+        /** 给定一个参照数组, 然后按照此数组进行排序 */
+        compareBy(item1: string, item2: string): number,
     }
 }
 

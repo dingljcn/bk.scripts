@@ -3,11 +3,15 @@ import { AbstractComponent, ComponentType } from "core";
 @Service(ProgressX, ComponentType.ProgressX, true)
 export default class ProgressX extends AbstractComponent<ProgressProps> {
 
-    @Template public template: string = `<div class="dinglj-v-progress-bar" :id="vid">
+    @Template public template: string = `<!-- 进度条 -->
+    <div class="dinglj-v-progress-bar" :id="vid">
+        <!-- 上方文本 -->
         <span :class="{ 'dinglj-v-progress-caption': true, 'top': true, 'right': position == 'TopRight' }" v-if="['TopLeft', 'TopRight'].includesIgnoreCase(position)">{{ caption }}{{ percent }}</span>
+        <!-- 进度条本体 -->
         <div class="dinglj-v-progress-box" :style="getContainerStyle()">
             <div class="dinglj-v-progress" :style="getProgressStyle()"></div>
         </div>
+        <!-- 下方文本 -->
         <span :class="{ 'dinglj-v-progress-caption': true, 'bottom': true, 'right': position == 'BottomRight' }" v-if="['BottomLeft', 'BottomRight'].includesIgnoreCase(position)">{{ caption }}{{ percent }}</span>
     </div>`;
     
@@ -18,11 +22,15 @@ export default class ProgressX extends AbstractComponent<ProgressProps> {
     }
 
     @Method public getProgressStyle(): object {
-        setTimeout(() => {
-            const container = window.byId(this.vid);
+        window.timer((self: ProgressX) => {
+            const container = window.byId(self.vid);
+            if (!container) {
+                return false;
+            }
             const box = container.findChildrenByClass('dinglj-v-progress-box')[0];
-            box.children[0].style.width = this.percent;
-        }, 100)
+            box.children[0].style.width = self.percent;
+            return true;
+        }, this);
         return {
             'width': '0%',
         }

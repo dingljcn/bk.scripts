@@ -6,7 +6,11 @@ class TableMode extends AbstractComponent<AppTableProps> {
 
     @Template
     public template: string = `<div class="mode-container table">
-        <i-table v-for="statusName in statusNames" class="every-tab" :i-props="tableProps(statusName)"></i-table>
+        <template v-for="(statusName, idx) in statusNames">
+            <div v-if="iProps.isActive || idx == 0" style="height: 100%">
+                <i-table class="every-tab" :i-props="tableProps(statusName)"></i-table>
+            </div>
+        </template>
     </div>`;
 
     @Method public tableProps(statusName: string): TableProps<Case, LangItem> {
@@ -28,7 +32,7 @@ class TableMode extends AbstractComponent<AppTableProps> {
                 list.forEach((i: HTMLElement) => {
                     const text = i.innerText.trim();
                     if (text) {
-                        i.innerHTML = `<div onclick="window.open('${ window.getConfigOrDefault(self.config, self.defaultConfig, 'urls.ticket', '', false) }/${ text }', '#${ text }')">#${ text }</div>`;
+                        i.innerHTML = `<div onclick="window.open('${ window.getConfigOrDefault('urls.ticket', '', false) }/${ text }', '#${ text }')">#${ text }</div>`;
                     }
                 })
             }
@@ -41,7 +45,7 @@ class TableMode extends AbstractComponent<AppTableProps> {
             return [];
         }
         // 先把所有列计算出来
-        let ignoreColumns = window.getConfigOrDefault(this.config, this.defaultConfig, 'table.ignoreColumn', [], false);
+        let ignoreColumns = window.getConfigOrDefault('table.ignoreColumn', [], false);
         const list4Display: Array<Case> = this.groupData[statusName];
         const result = Case._fields_.filter(fieldName => {
             // 根据配置把忽略的列过滤掉
@@ -58,12 +62,6 @@ class TableMode extends AbstractComponent<AppTableProps> {
         }).map(fieldName => new LangItem(fieldName, Case._fieldMap_[fieldName]));
         return result;
     }
-
-    @Compute(window.readConfig)
-    public config: any;
-
-    @Compute(window.defaultConfig)
-    public defaultConfig: any;
 
     @Compute((self: TableMode) => self.iProps.groupData || {})
     public groupData: any;

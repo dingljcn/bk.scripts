@@ -1,9 +1,9 @@
+import './encode-config';
 import { AbstractComponent, LangItem } from 'core';
 import { Case } from 'dev';
 import xfilter from './filter';
 import xcard from './card';
 import xtable from './table';
-import './encode-config';
 
 window.linkCss('/src/script/case-list/index.css');
 
@@ -12,10 +12,10 @@ window.document.body.innerHTML = `<div id="case-list-dinglj-container">
         <template v-slot:before>
             <xfilter @on-change="obj => filter.data = obj.value"></xfilter>
         </template>
-        <template v-slot:content id="case-list-view">
-            <i-tab-view v-for="componentName in componentNames" :i-props="tabViewProps(componentName)">
-                <xcard  v-if="filter.data.mode == 'card'" :i-props="cardModeProps(componentName)"></xcard>
-                <xtable v-else :i-props="tableModeProps(componentName)"></xtable>
+        <template #content="{ active }" id="case-list-view">
+            <i-tab-view v-for="componentName in componentNames" :i-props="tabViewProps(componentName, active)">
+                <xcard  v-if="filter.data.mode == 'card'" :i-props="cardModeProps(componentName, active)"></xcard>
+                <xtable v-else :i-props="tableModeProps(componentName, active)"></xtable>
             </i-tab-view>
         </template>
         <template v-slot:after></template>
@@ -55,10 +55,10 @@ export class App extends AbstractComponent<any> {
     /** 某个 Component 分组下, 排好序的 Status 顺序 */
     @Method public statusNames(componentName: string): Array<string> {
         const data = this.groupByStatus(componentName);
-        let order: Array<string> = window.getConfigOrDefault(this.config, this.defaultConfig, 'order.preferStatus', [], false)
+        let order: Array<string> = window.getConfigOrDefault('order.preferStatus', [], false)
             .map(i => i.toLowerCase());
         return Object.keys(data).sort((o1: string, o2: string) => {
-            return window.compareStringByArray(order, o1.toLowerCase(), o2.toLowerCase());
+            return order.compareBy(o1.toLowerCase(), o2.toLowerCase());
         });
     }
 
@@ -76,38 +76,33 @@ export class App extends AbstractComponent<any> {
     })
     public navProps: NavigatorViewProps<string>;
 
-    @Method public tabViewProps(componentName: string): TabViewProps<LangItem> {
+    @Method public tabViewProps(componentName: string, active: string): TabViewProps<LangItem> {
         return {
             list: this.tabTitle(componentName),
+            isActive: componentName == active,
             getLabel: item => item.zh,
         }
     }
 
-    @Method public cardModeProps(componentName: string): AppCardProps {
+    @Method public cardModeProps(componentName: string, active: string): AppCardProps {
         return {
+            isActive: componentName == active,
             statusNames: this.statusNames(componentName),
             groupData: this.groupByStatus(componentName),
             cardCnt: this.filter.data.cardCnt,
         }
     }
 
-    @Method public tableModeProps(componentName: string): AppTableProps {
+    @Method public tableModeProps(componentName: string, active: string): AppTableProps {
         return {
+            isActive: componentName == active,
             statusNames: this.statusNames(componentName),
             groupData: this.groupByStatus(componentName),
         }
     }
-    
-    /** 获取用户配置 */
-    @Compute(window.readConfig)
-    public config: any;
-
-    /** 获取脚本设置的默认配置 */
-    @Compute(window.defaultConfig)
-    public defaultConfig: any;
 
     /** 状态 */
-    @Compute((self: App) => window.getConfigOrDefault(self.config, self.defaultConfig, 'constant.status', [], true))
+    @Compute((self: App) => window.getConfigOrDefault('constant.status', [], true))
     public status: any
 
     /** 获取用例集合 */
@@ -121,10 +116,10 @@ export class App extends AbstractComponent<any> {
         }
         let result;
         if (version == 'default') {
-            const str: string = window.get(window.getConfigOrDefault(self.config, self.defaultConfig, 'urls.defaultVersionData', '', false));
+            const str: string = $net.get(window.getConfigOrDefault('urls.defaultVersionData', '', false));
             result =  JSON.parse(str).testCaseTasks;
         } else {
-            const str: string = window.get(window.getConfigOrDefault(self.config, self.defaultConfig, 'urls.readVersion', '', false) + version);
+            const str: string = $net.get(window.getConfigOrDefault('urls.readVersion', '', false) + version);
             result =  JSON.parse(str);
         }
         self.allVersionDatas[version] = result.map((item: any) => new Case(item, self.status));
@@ -162,11 +157,11 @@ export class App extends AbstractComponent<any> {
     
     /** 排过序的模块名称 */
     @Compute((self: App) => {
-        let order = window.getConfigOrDefault(self.config, self.defaultConfig, 'order.preferComponent', [], false)
+        let order = window.getConfigOrDefault('order.preferComponent', [], false)
             .map(i => i.toLowerCase());
         order.unshift('unit');
         const result = Object.keys(self.groupByComponent).sort((o1, o2) => {
-            return window.compareStringByArray(order, o1.toLowerCase(), o2.toLowerCase());
+            return order.compareBy(o1.toLowerCase(), o2.toLowerCase());
         });
         return result;
     })

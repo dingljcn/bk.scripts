@@ -7,11 +7,15 @@ declare global {
         statusNames: Array<string>;
         /** 每列多少个卡片 */
         cardCnt: string;
+        /** 是否是当前界面 */
+        isActive?: boolean;
     }
     /** 表格组件的参数 */
     interface AppTableProps {
         /** 当前分组的数据 */
         groupData: any;
+        /** 是否是当前界面 */
+        isActive?: boolean;
         /** 用例状态的名字 */
         statusNames: Array<string>;
     }

@@ -3,7 +3,8 @@ import { AbstractComponent, ComponentType } from "core";
 @Service(ScrollerY, ComponentType.ScrollerY, true)
 export default class ScrollerY extends AbstractComponent<ScrollYProps> {
 
-    @Template public template: string = `<div class="dinglj-v-column-scroll" :id="vid" :style="getStyle()">
+    @Template public template: string = `<!-- 纵向滚动视图 -->
+    <div class="dinglj-v-column-scroll" :id="vid" :style="getStyle()">
         <slot></slot>
     </div>`;
 

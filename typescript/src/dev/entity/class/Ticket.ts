@@ -20,6 +20,8 @@ const fields = {
     keywords: '关键词',
     cc: '抄送',
     version: '版本',
+    needbuild: '需打包',
+    devtype: '开发类型',
     dinglj_note: '备注',
 };
 

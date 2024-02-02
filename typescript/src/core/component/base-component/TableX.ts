@@ -21,33 +21,46 @@ export default class TableX<T> extends AbstractComponent<TableProps<T, any>> {
         }, this.vid);
     }
 
-    @Template public template: string = `<div class="dinglj-v-table" :id="vid" :data-title="title">
+    @Template public template: string = `<!-- 表格 -->
+    <div class="dinglj-v-table" :id="vid" :data-title="title">
+        <!-- 表头 -->
         <div class="dinglj-v-thead dinglj-v-tr">
+            <!-- 复选框 -->
             <div :style="getStyle('')" v-if="selectable" class="dinglj-v-table-select" @click="doCheckAll">
                 <input type="checkbox" :checked="checkAll"/>选择
             </div>
+            <!-- 序号 -->
             <div :style="getStyle('')" v-if="sequenceNum" class="dinglj-v-table-sequence">
                 序号
             </div>
+            <!-- 表头的每一列 -->
             <div :style="getStyle(getColumnKey(column))" :data-key="getColumnKey(column)" v-for="column in columns" :class="getClass(column)" :id="vid + '-Col-' + getColumnKey(column)">
                 {{ getColumnLabel(column) }}
+                <!-- 表头的右键菜单 -->
                 <i-context-menu :i-props="genHeadProps(column)"></i-context-menu>
             </div>
         </div>
+        <!-- 表体 -->
         <div class="dinglj-v-tbody" :id="vid + '-Body'">
             <div>
+                <!-- 表格的每一行内容 -->
                 <div class="dinglj-v-tr" v-for="(line, idx) in list" @click="checkOne(line)" :id="vid + '-' + idx">
+                    <!-- 复选框 -->
                     <div :style="getStyle('')" v-if="selectable" class="dinglj-v-table-select">
                         <input type="checkbox" :checked="checkedList.includesIgnoreCase(line)"/>
                     </div>
+                    <!-- 序号 -->
                     <div :style="getStyle('')" v-if="sequenceNum" class="dinglj-v-table-sequence">
                         {{ idx + 1 }}
                     </div>
+                    <!-- 表格中的每一列 -->
                     <div :style="getStyle(getColumnKey(column))" :class="getClass(column)" v-for="column in columns">
                         <div class="dinglj-v-auto-hidden" v-html="getCell(line, getColumnKey(column))"></div>
                     </div>
+                    <!-- 表格每一行的右键菜单 -->
                     <i-context-menu :i-props="genLineProps(line, idx)"></i-context-menu>
                 </div>
+                <!-- 表格空白处的右键菜单 -->
                 <i-context-menu :i-props="genBodyProps()"></i-context-menu>
             </div>
         </div>
@@ -167,7 +180,7 @@ export default class TableX<T> extends AbstractComponent<TableProps<T, any>> {
                 })
             );
             const maxWidth = Math.max(...widthArray);
-            this.bestWidthCache[columnKey] = maxWidth + 30;
+            this.bestWidthCache[columnKey] = maxWidth + 20;
         }
         return this.bestWidthCache;
     }

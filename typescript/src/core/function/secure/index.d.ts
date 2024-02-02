@@ -1,4 +1,12 @@
 declare global {
+    /** RSA 密钥 */
+    interface RSA {
+        /** 公钥 */
+        pub: string;
+        /** 私钥 */
+        pri: string;
+    }
+    /** 数据安全功能 */
     interface DingljSecure {
         /** 默认公钥加密 */
         encrypt(data: string): string,
@@ -16,8 +24,10 @@ declare global {
     /** rsa 工具类 */
     const $rsa: DingljSecure;
     interface Window {
-        /** rsa 工具类 */
+        /** RSA 工具类 */
         $rsa: DingljSecure;
+        /** RSA 密钥 */
+        rsa: RSA;
     }
 }
 

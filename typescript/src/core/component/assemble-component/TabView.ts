@@ -13,10 +13,9 @@ export default class TabView<T> extends AbstractComponent<TabViewProps<T>> {
         }, this.vid);
     }
 
-    @Template public template: string = `<div class="dinglj-v-tab-panel-view" :id="vid">
-        <!-- TabView 总容器 -->
+    @Template public template: string = `<!-- Tab 页视图 -->
+    <div class="dinglj-v-tab-panel-view" :id="vid">
         <i-tab-panel :i-props="tabPanelProps" @mounted="tabPanelLoaded">
-            <!-- TabView 内容 -->
             <i-scroller-x :i-props="scrollxProps">
                 <slot></slot>
             </i-scroller-x>

@@ -1,8 +1,8 @@
-Window.prototype.byId = function(id: string): HTMLElement {
+Window.prototype.byId = function(id) {
     return document.getElementById(id);
 }
 
-Window.prototype.byClass = function(classes: string, document: Document = window.document): Array<HTMLElement> {
+Window.prototype.byClass = function(classes, document: Document = window.document) {
     const result: Array<HTMLElement> = [];
     const findData: any = document.getElementsByClassName(classes);
     if (findData) {
@@ -11,8 +11,8 @@ Window.prototype.byClass = function(classes: string, document: Document = window
     return result;
 }
 
-Window.prototype.query = function(selector: string): Array<HTMLElement> {
-    let result = [];
+Window.prototype.query = function(selector) {
+    let result: Array<HTMLElement> = [];
     const findData: any = document.querySelectorAll(selector);
     if (findData) {
         result.push(...findData);
@@ -26,7 +26,7 @@ window.defunc(window, 'calcTxtWidth', function(item: string | HTMLElement): numb
         return window.calcTxtWidth(item.innerText, computedStyle.fontWeight, computedStyle.fontSize, computedStyle.fontFamily);
     } else {
         item = item + '';
-        return window.calcTxtWidth(item, '400', '12px', '微软雅黑');
+        return window.calcTxtWidth(item, '700', '14px', 'Microsoft YaHei');
     }
 });
 
@@ -71,12 +71,16 @@ Element.prototype.findBroByClass = function(clazz) {
     return this.parentElement.findChildrenByClass(clazz);
 }
 
-Window.prototype.indexOfChildByClass = function(parent: HTMLElement, _class: string): number {
-    let list = parent.children;
+Element.prototype.indexByClass = function(clazz) {
+    return this.parentElement.indexByClassInChildren(clazz);
+}
+
+Element.prototype.indexByClassInChildren = function(clazz) {
+    let list = this.children;
     for(let i = 0; i < list.length; i++) {
-        if (list[i].classList.contains(_class)) {
+        if (list[i].classList.contains(clazz)) {
             return i;
         }
     }
     return -1;
-};
+}

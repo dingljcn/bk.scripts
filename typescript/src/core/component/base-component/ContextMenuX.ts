@@ -10,8 +10,11 @@ export default class ContextMenuX<T> extends AbstractComponent<ContextMenuProps<
     }
 
     @Template public template: string = `<teleport to="body" v-if="display">
+        <!-- 右键菜单 -->
         <div class="dinglj-v-context-menu" :style="position" :id="vid">
+            <!-- 右键菜单集合 -->
             <div v-for="item in $list">
+                <!-- 每一个右键菜单 -->
                 <div v-if="conditionIfDisplay(item)" class="dinglj-v-context-menu-item" @click.stop="execCommand(item)">
                     <div class="text">{{ item.label }}</div>
                 </div>
@@ -40,6 +43,9 @@ export default class ContextMenuX<T> extends AbstractComponent<ContextMenuProps<
                 return false;
             }
             _this.element.addEventListener('contextmenu', function(e: MouseEvent): void {
+                if (!_this.$list || _this.$list.length == 0) {
+                    return;
+                }
                 $queue.sendMsg('hidden-right-context-menu', null);
                 e.stopPropagation();
                 e.preventDefault();

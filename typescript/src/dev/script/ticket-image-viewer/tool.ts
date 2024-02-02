@@ -38,10 +38,10 @@ $tool.getLimit = function(activePanel: HTMLElement, height: number = -1): number
 $tool.getCurrentIndex = function(activePanel: HTMLElement): number {
     let current = -1;
     if (current == -1) {
-        current = window.indexOfChildByClass(activePanel, 'active');
+        current = activePanel.indexByClassInChildren('active');
     }
     if (current == -1) {
-        current = window.indexOfChildByClass(activePanel, 'last');
+        current = activePanel.indexByClassInChildren('last');
     }
     if (current == -1) {
         current = 0;
@@ -68,11 +68,7 @@ $tool.getScrollProp = function(activePanel: HTMLElement, direction: MoveDirectio
 
 window.altDown = false;
 
-const userConfig = window.readConfig();
-
-const defaultConfig = window.defaultConfig();
-
-const hotKey = window.getConfigOrDefault(userConfig, defaultConfig, 'hotKey', {});
+const hotKey = window.getConfigOrDefault('hotKey', {});
 
 const keys = Object.values(hotKey).map((i: string) => i.toUpperCase());
 
@@ -122,21 +118,3 @@ window.addEventListener('keydown', e => {
         }
     }
 });
-
-/******************************************* 其他工具方法 *******************************************/
-
-export function isMatch() {
-    if (window.isDev()) {
-        return true;
-    }
-    const url = window.location.href;
-    const matchs = window.getConfigOrDefault(window.readConfig(), window.defaultConfig(), 'matchList', []);
-    for (let match of matchs) {
-        let regExp = window.createRegExp(match);
-        if (regExp.test(url)) {
-            return true;
-        }
-    }
-    '截图查看工具暂未匹配当前 url 地址, 你可以修改油猴脚本, 新增 matchList 的元素以进行适配, 如添加后仍无法适配, 请联系我'.err();
-    return false;
-}

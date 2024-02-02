@@ -76,16 +76,8 @@ class Filter extends AbstractComponent<any> {
     })
     public cardCntProps: InputProps;
 
-    /** 获取用户配置 */
-    @Compute(window.readConfig)
-    public config: any;
-
-    /** 获取脚本设置的默认配置 */
-    @Compute(window.defaultConfig)
-    public defaultConfig: any;
-
     /** 状态 */
-    @Compute((self: Filter) => window.getConfigOrDefault(self.config, self.defaultConfig, 'constant.status', [], true))
+    @Compute((self: Filter) => window.getConfigOrDefault('constant.status', [], true))
     public status: any
 
     @Compute((self: Filter) => {
@@ -93,8 +85,8 @@ class Filter extends AbstractComponent<any> {
             return (window as any).readVersion();
         }
         if (self.versionList.length == 0) {
-            let versions = window.getConfigOrDefault(self.config, self.defaultConfig, 'urls.versions', '', false);
-            self.versionList = JSON.parse(window.get(versions));
+            let versions = window.getConfigOrDefault('urls.versions', '', false);
+            self.versionList = JSON.parse($net.get(versions));
         }
         return self.versionList;
     })

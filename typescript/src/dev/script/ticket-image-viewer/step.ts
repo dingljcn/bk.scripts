@@ -58,7 +58,7 @@ export class AppStep extends AbstractComponent<any> {
     }
 
     @Template
-    public template: string = `<div id="step-container">{{arrow}}
+    public template: string = `<div id="step-container">
         <div :class="containerClass">
             <div :title="stepNumber" :class="itemClass(idx)" v-for="(stepNumber, idx) of steps" @click="setIdx(idx)">
                 {{ stepNumber.replace(/\.png/, '') }}
@@ -142,7 +142,7 @@ export class AppStep extends AbstractComponent<any> {
             return result;
         }
         const regExp = /.*\.png">(.*.png)<\/a>.*/;
-        const response = window.get<string>(`${ window.location.href }1/${ self.line }`);
+        const response = $net.get<string>(`${ window.location.href }1/${ self.line }`);
         const stepNumbers = response.split('\n');
         const result = stepNumbers.map(step =>  regExp.test(step) ? regExp.exec(step)[1] : '')
             .filter(href => href != '')

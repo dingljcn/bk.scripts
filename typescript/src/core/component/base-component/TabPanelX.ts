@@ -20,13 +20,16 @@ export default class TabPanelX<T> extends AbstractComponent<TabPanelProps<T>> {
         }, this.vid);
     }
 
-    @Template public template: string = `<div class="dinglj-v-tab-panel" :id="vid" v-if="list.length > 0">
+    @Template public template: string = `<!-- Tab -->
+    <div class="dinglj-v-tab-panel" :id="vid" v-if="list.length > 0">
+        <!-- Tab 页标题 -->
         <div class="dinglj-v-tabpanel-title">
-            <div class="dinglj-v-tab-float"></div>
+            <div class="dinglj-v-tab-float"></div><!-- Tab 页标题的浮动下划线 -->
             <div v-for="(item, idx) in list" :class="getClass(item)" :id="getId(idx)" @click="clicked(item, idx)">
                 {{ getLabel(item) }}
             </div>
         </div>
+        <!-- Tab 页具体内容 -->
         <div class="dinglj-v-tabpanel-view">
             <slot class="tab-panel-content">{{ index }}</slot>
         </div>
@@ -57,14 +60,19 @@ export default class TabPanelX<T> extends AbstractComponent<TabPanelProps<T>> {
             vid: this.vid,
             value: item,
         })
-        setTimeout(() => {
-            const floatElement = window.query(`#${ this.vid } .dinglj-v-tab-float`)[0];
-            const element: HTMLElement = window.byId(this.getId(index));
+        window.timer((self: TabPanelX<T>) => {
+            const result = window.query(`#${ self.vid } .dinglj-v-tab-float`);
+            if (!result) {
+                return false;
+            }
+            const floatElement = result[0];
+            const element: HTMLElement = window.byId(self.getId(index));
             if (element) {
                 floatElement.style.width = `${ element.offsetWidth }px`;
                 floatElement.style.left = `${ element.offsetLeft }px`;
             }
-        }, 50);
+            return true
+        }, this);
     }
 
     @Compute((self: TabPanelX<T>) => {
@@ -103,6 +111,8 @@ declare global {
     interface TabPanelProps<T> {
         /** 要显示的 tab 页数组 */
         list: Array<T>;
+        /** 是否是当前界面 */
+        isActive?: boolean;
         /** 获取要显示的 tab 页名称 */
         getLabel?(item: T): string;
         /** Tab 页切换事件 */

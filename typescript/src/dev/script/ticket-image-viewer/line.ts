@@ -34,7 +34,7 @@ export class AppLine extends AbstractComponent<any> {
     }
 
     @Template
-    public template: string = `<div id="line-container">{{arrow}}
+    public template: string = `<div id="line-container">
         <div :class="containerClass">
             <div :title="lineNumber" :class="itemClass(idx)" v-for="(lineNumber, idx) of lines" @click="setIdx(idx)">
                 {{ lineNumber }}
@@ -106,7 +106,7 @@ export class AppLine extends AbstractComponent<any> {
         if (window.readLines) {
             return window.readLines();
         }
-        const response = window.get<string>(`${ window.location.href }1`);
+        const response = $net.get<string>(`${ window.location.href }1`);
         const lineNumbers = response.split('\n');
         return lineNumbers.map((line: string) =>  readLineRegExp.test(line) ? readLineRegExp.exec(line)[1] : '')
             .filter((href: string) => href != '')

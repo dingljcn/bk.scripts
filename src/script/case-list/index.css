@@ -10,8 +10,8 @@ body {
 #case-list-dinglj-container {
     --padding: 5px;
     display: flex;
-    width: calc(100% - var(--padding) * 2);
-    height: calc(100% - var(--padding) * 2);
+    width: 100vw;
+    height: 100vh;
     padding: var(--padding);
 }
 

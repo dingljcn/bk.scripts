@@ -11,11 +11,10 @@ export default class NavigatorX<T> extends AbstractComponent<NavigatorProps<T>> 
         }
     }
 
-    @Template public template: string = `<div id="dinglj-v-navigator">
-        <div class="dinglj-v-navigator-item" 
-            v-for="item in list" 
-            @click="setValue(item)"
-            :class="{ 'active': validItem == item }">
+    @Template public template: string = `<!-- 导航菜单 -->
+    <div id="dinglj-v-navigator">
+        <!-- 每一个菜单 -->
+        <div class="dinglj-v-navigator-item" v-for="item in list" @click="setValue(item)" :class="{ 'active': validItem == item }">
             {{ getCaption(item) }}
         </div>
     </div>`;

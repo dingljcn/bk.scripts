@@ -3,6 +3,19 @@ import { Ticket } from "dev";
 
 declare global {
     type TicketFields = keyof typeof Ticket.fields;
+    /** url 中的参数 */
+    interface UrlParam {
+        /** 哪些用户 */
+        user: Array<string>;
+        /** 哪些状态 */
+        status: Array<string>;
+        /** 哪些列 */
+        column: Array<string>;
+        /** 按哪个分组 */
+        groupby: string;
+        /** 查询数量限制 */
+        max: number;
+    }
     interface TableColumn<T> {
         /** 右键选择的字段 */
         columnKey: TicketFields;
@@ -40,12 +53,11 @@ declare global {
         }
     }
     interface TicketUtils {
-        /** 读取用户配置 */
-        config(): any;
-        /** 读取系统默认配置 */
-        defaultConfig(): any;
-        /** 获取我的名称 */
         whoami(): string;
+        /** 解析 url 的参数 */
+        urlArgs: UrlParam;
+        /** 请求变更 */
+        queryTicket(): string;
         /** 读取 HTML 中的变更 */
         readTicket(): Array<Ticket>;
         readTicket(htmlData: string): Array<Ticket>;

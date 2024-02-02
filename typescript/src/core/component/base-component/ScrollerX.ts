@@ -3,7 +3,8 @@ import { AbstractComponent, ComponentType } from "core";
 @Service(ScrollerX, ComponentType.ScrollerX, true)
 export default class ScrollerX extends AbstractComponent<ScrollXProps> {
 
-    @Template public template: string = `<div class="dinglj-v-row-scroll" :id="vid" :style="getStyle()">
+    @Template public template: string = `<!-- 横向滚动视图 -->
+    <div class="dinglj-v-row-scroll" :id="vid" :style="getStyle()">
         <slot></slot>
     </div>`;
 
