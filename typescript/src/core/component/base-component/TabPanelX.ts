@@ -61,7 +61,7 @@ export default class TabPanelX<T> extends AbstractComponent<TabPanelProps<T>> {
             value: item,
         })
         window.timer((self: TabPanelX<T>) => {
-            const result = window.query(`#${ self.vid } .dinglj-v-tab-float`);
+            const result = window.selector(`#${ self.vid } .dinglj-v-tab-float`);
             if (!result) {
                 return false;
             }

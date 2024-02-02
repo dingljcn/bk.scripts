@@ -6,7 +6,7 @@ declare global {
         byClass(classes: string): Array<HTMLElement>;
         byClass(classes: string, document: Document): Array<HTMLElement>;
         /** 根据选择器获取元素 */
-        query(selector: string): Array<HTMLElement>;
+        selector(selector: string): Array<HTMLElement>;
         /** 计算文字宽度 */
         calcTxtWidth(target: string | HTMLElement): number;
         /** 计算文字宽度 */

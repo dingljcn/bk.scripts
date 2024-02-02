@@ -28,7 +28,7 @@ class TableMode extends AbstractComponent<AppTableProps> {
                 return $get(item, column);
             },
             loaded: para => {
-                const list = window.query(`#${ para.vid } .dinglj-v-tbody .dinglj-v-cell.ticket`);
+                const list = window.selector(`#${ para.vid } .dinglj-v-tbody .dinglj-v-cell.ticket`);
                 list.forEach((i: HTMLElement) => {
                     const text = i.innerText.trim();
                     if (text) {

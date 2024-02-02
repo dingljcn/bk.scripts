@@ -308,7 +308,7 @@ $ticket.updateSummary = function(vue: TicketApp, ticket: Ticket): void {
 
 $ticket.afterTableLoad = function(vue: TicketApp, tableId: string): void {
     window.timer(function() {
-        const list = window.query(`#${ tableId } .dinglj-v-tbody .dinglj-v-cell.id`);
+        const list = window.selector(`#${ tableId } .dinglj-v-tbody .dinglj-v-cell.id`);
         if (list.length == 0) {
             return false;
         }

@@ -11,7 +11,7 @@ Window.prototype.byClass = function(classes, document: Document = window.documen
     return result;
 }
 
-Window.prototype.query = function(selector) {
+Window.prototype.selector = function(selector) {
     let result: Array<HTMLElement> = [];
     const findData: any = document.querySelectorAll(selector);
     if (findData) {
