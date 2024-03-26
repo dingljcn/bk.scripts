@@ -1,0 +1,38 @@
+.dinglj-v-context-menu {
+    position: absolute;
+    background: rgba(255,255,255,0.65);
+    backdrop-filter: blur(5px);
+    padding: 10px;
+    box-shadow: 0 0 10px -4px grey;
+    border-radius: 5px;
+    min-height: 200px;
+}
+
+.dinglj-v-context-menu-item {
+    position: relative;
+    cursor: pointer;
+    min-width: 150px;
+    padding: 3px 0;
+}
+
+.dinglj-v-context-menu-item .text {
+    transition: var(--transition);
+}
+
+.dinglj-v-context-menu-item:hover .text {
+    text-indent: 10px;
+}
+
+.dinglj-v-context-menu-item::before {
+    position: absolute;
+    content: '';
+    width: 4px;
+    height: 0%;
+    background: var(--theme-color);
+    top: 10%;
+    transition: var(--transition);
+}
+
+.dinglj-v-context-menu-item:hover::before {
+    height: 80%;
+}

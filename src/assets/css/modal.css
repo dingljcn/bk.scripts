@@ -1,0 +1,69 @@
+.dinglj-v-modal {
+    --font-size: 12px;
+    font-size: var(--font-size);
+}
+
+.dinglj-v-modal {
+    display: flex;
+    flex-direction: column;
+    min-width: 400px;
+    min-height: 200px;
+    position: absolute;
+    border: 1px solid rgba(0,0,0,0.1);
+    padding: 5px;
+    border-radius: 10px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+}
+
+.dinglj-v-modal-title {
+    --title-height: 30px;
+    display: flex;
+    height: var(--title-height);
+    line-height: var(--title-height);
+}
+
+.dinglj-v-modal-title * {
+    user-select: none;
+}
+
+.dinglj-v-modal-title-name {
+    font-weight: bold;
+    text-indent: 5px;
+}
+
+.dinglj-v-modal-title * {
+    line-height: var(--title-height);
+}
+
+.dinglj-v-close-modal {
+    --margin: 5px;
+    width: calc(var(--title-height) - var(--margin) * 2);
+    height: calc(var(--title-height) - var(--margin) * 2);
+    margin: var(--margin);
+    cursor: pointer;
+}
+
+.dinglj-v-modal-content {
+    flex: 1;
+    border: 1px dashed rgba(0,0,0,0.2);
+    border-radius: 5px;
+    margin: 5px;
+    padding: 10px;
+}
+
+.dinglj-v-modal-btns {
+    display: flex;
+}
+
+.dinglj-v-modal-mask {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(5px);
+}
