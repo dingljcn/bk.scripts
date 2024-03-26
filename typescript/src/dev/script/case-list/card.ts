@@ -1,5 +1,6 @@
 import { AbstractComponent } from "core";
 import { Case } from "dev";
+import { getTicketUrl } from "./tool";
 
 @Service(Card, 'AppCard', true)
 class Card extends AbstractComponent<AppCardProps> {
@@ -40,7 +41,7 @@ class Card extends AbstractComponent<AppCardProps> {
     }
 
     @Method public openCardTicket(_case_: Case): void {
-        window.open(`${ window.getConfigOrDefault('urls.ticket', '', false) }/${ _case_.ticket }`, `#${ _case_.ticket }`)
+        window.open(`${ getTicketUrl() }/${ _case_.ticket }`, `#${ _case_.ticket }`)
     }
 
     @Compute((self: Card) => {

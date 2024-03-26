@@ -49,6 +49,7 @@ export class Case {
                 } else if (origin.result == 'ERROR') {
                     this.status = statusConstant.ERROR
                 } else {
+                    this.status = statusConstant.UNKNOWN;
                     console.error(`未知的状态 {${ origin.stats }}, 结果 {${ origin.result }}, 请联系 dinglj 补充`);
                 }
             } else if (origin.stats == '执行中') {
@@ -60,6 +61,7 @@ export class Case {
             } else if (origin.stats == '已发送') {
                 this.status = statusConstant.SENDED;
             } else {
+                this.status = statusConstant.UNKNOWN;
                 console.error(`未知的状态 {${ origin.stats }}, 请联系 dinglj 补充`);
             }
         } else {
@@ -68,11 +70,12 @@ export class Case {
             } else if (origin.result == 'SUCCESS') {
                 this.status = statusConstant.SUCCESS;
             } else {
+                this.status = statusConstant.UNKNOWN;
                 console.error(`未知的结果 {${ origin.result }}, 请联系 dinglj 补充`);
             }
         }
-        if (!this.status) { // 没有状态, 打印原始数据
-            console.log(origin);
+        if (this.status == statusConstant.UNKNOWN) { // 没有状态, 打印原始数据
+            console.error(origin);
         }
         this.currentRow = parseInt(origin.currentRow || 0);
         this.zip = origin.erpVersion;

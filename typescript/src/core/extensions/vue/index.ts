@@ -6,6 +6,8 @@ declare global {
         registVue(name: string, component: Vue): Vue,
         /** 显示 vue 信息 */
         displayData(): any,
+        /** 定义 Emit */
+        defineEmits(list: Array<string>): Function;
     }
 }
 

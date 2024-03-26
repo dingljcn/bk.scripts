@@ -4,23 +4,26 @@ import { Case } from 'dev';
 import xfilter from './filter';
 import xcard from './card';
 import xtable from './table';
+import { getDefaultListUrl, getDefaultValue, getReadVersionUrl, getUrl } from './tool';
 
-window.linkCss('/src/script/case-list/index.css');
-
-window.document.body.innerHTML = `<div id="case-list-dinglj-container">
-    <i-nav-view :i-props="navProps">
-        <template v-slot:before>
-            <xfilter @on-change="obj => filter.data = obj.value"></xfilter>
-        </template>
-        <template #content="{ active }" id="case-list-view">
-            <i-tab-view v-for="componentName in componentNames" :i-props="tabViewProps(componentName, active)">
-                <xcard  v-if="filter.data.mode == 'card'" :i-props="cardModeProps(componentName, active)"></xcard>
-                <xtable v-else :i-props="tableModeProps(componentName, active)"></xtable>
-            </i-tab-view>
-        </template>
-        <template v-slot:after></template>
-    </i-nav-view>
-</div>`;
+// 通过此方法先判定是否支持脚本, 不支持则退出, 不要进行任何修改
+if (getUrl() != undefined) {
+    window.linkCss('/src/script/case-list/index.css');
+    window.document.body.innerHTML = `<div id="case-list-dinglj-container">
+        <i-nav-view :i-props="navProps">
+            <template v-slot:before>
+                <xfilter @on-change="obj => filter.data = obj.value"></xfilter>
+            </template>
+            <template #content="{ active }" id="case-list-view">
+                <i-tab-view v-for="componentName in componentNames" :i-props="tabViewProps(componentName, active)">
+                    <xcard  v-if="filter.data.mode == 'card'" :i-props="cardModeProps(componentName, active)"></xcard>
+                    <xtable v-else :i-props="tableModeProps(componentName, active)"></xtable>
+                </i-tab-view>
+            </template>
+            <template v-slot:after></template>
+        </i-nav-view>
+    </div>`;
+}
 
 @Service(App, 'App')
 export class App extends AbstractComponent<any> {
@@ -116,13 +119,15 @@ export class App extends AbstractComponent<any> {
         }
         let result;
         if (version == 'default') {
-            const str: string = $net.get(window.getConfigOrDefault('urls.defaultVersionData', '', false));
-            result =  JSON.parse(str).testCaseTasks;
+            const str: string = $net.get(getDefaultListUrl());
+            result = getDefaultValue(JSON.parse(str), []);
         } else {
-            const str: string = $net.get(window.getConfigOrDefault('urls.readVersion', '', false) + version);
+            const str: string = $net.get(getReadVersionUrl() + version);
             result =  JSON.parse(str);
         }
-        self.allVersionDatas[version] = result.map((item: any) => new Case(item, self.status));
+        self.allVersionDatas[version] = result
+            .map((item: any) => new Case(item, self.status))
+            .filter((item: Case) => item.status != self.status.UNKNOWN);
         return self.allVersionDatas[version];
     })
     public originData: Array<Case>

@@ -8,6 +8,11 @@ declare global {
         isDev(): boolean,
         /** 本地测试时用于读取配置 */
         readData(...params: any): any,
+        /** 显示文件夹选择框 */
+        showDirectoryPicker(): Promise<FileSystemDirectoryHandle>,
+    }
+    interface FileSystemDirectoryHandle {
+        entries(): AsyncIterator<any>;
     }
 }
 

@@ -13,6 +13,9 @@ enum ComponentType {
     ProgressX       = 'I-Progress',
     ModalX          = 'I-Modal',
     ContextMenuX    = 'I-Context-Menu',
+    FileTreeX       = 'I-File-Tree',
+    TreeView        = 'I-Tree-View',
+    TextAreaX       = 'I-Text-Area',
 }
 
 declare global {

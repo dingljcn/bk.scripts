@@ -2,7 +2,8 @@
     "scripts": {
         "case": "webpack --config ./webpack/case-list.config.js",
         "view": "webpack --config ./webpack/ticket-image-viewer.config.js",
-        "tickets": "webpack --config ./webpack/ticket-list.config.js"
+        "tickets": "webpack --config ./webpack/ticket-list.config.js",
+        "wkp": "webpack --config ./webpack/workspace.config.js"
     },
     "dependencies": {
         "browser-env": "^3.3.0",

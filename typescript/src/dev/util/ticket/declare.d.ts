@@ -52,6 +52,12 @@ declare global {
             storage: string,
         }
     }
+    interface TicketDtlProps {
+        ticketModal: TicketModal;
+        app: TicketApp;
+        saveCache(notes: string): void;
+        closeWindow(): void;
+    }
     interface TicketUtils {
         whoami(): string;
         /** 解析 url 的参数 */

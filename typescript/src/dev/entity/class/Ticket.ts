@@ -27,10 +27,10 @@ const fields = {
 
 export class Ticket {
     static fields = fields;
-    static fieldNames = Object.keys(fields);
+    static fieldNames: Array<TicketFields> = (Object.keys(fields) as any);
     static fieldValues = Object.values(fields);
     static unknownColumn = ['sel'];
-    static getCaption(key: string) {
+    static getCaption(key: any) {
         if (Ticket.fieldNames.includesIgnoreCase(key)) {
             return (Ticket.fields as any)[key];
         }
@@ -40,24 +40,30 @@ export class Ticket {
         if (element == null) {
             return;
         }
-        const info = $store.getStorage<any>('dinglj-v-ticket-info', {});
+        const info = $store.getStorage<any>('dinglj-v-ticket-cache', {});
         for (let cell of element.children) {
             const key = cell.className;
             const value = cell.innerText.trim();
             this.set(key as any, value);
             if ('id'.equalsIgnoreCase(key) && info[value]) {
-                this.set('dinglj_note', info[value].note);
+                const cacheFields: Array<TicketFields> = Object.keys(info[value]) as any;
+                for (let field of cacheFields) {
+                    this.set(field, info[value][field]);
+                }
             }
         }
     }
     static forLocalTest(element: any) {
         let ticket = new Ticket();
-        const info = $store.getStorage<any>('dinglj-v-ticket-info', {});
+        const info = $store.getStorage<any>('dinglj-v-ticket-cache', {});
         for (let key of Object.keys(element)) {
             const value = $get<any>(element, key);
             ticket.set(key as any, value);
             if ('id'.equalsIgnoreCase(key) && info[value]) {
-                ticket.set('dinglj_note', info[value].note);
+                const cacheFields: Array<TicketFields> = Object.keys(info[value]) as any;
+                for (let field of cacheFields) {
+                    ticket.set(field, info[value][field]);
+                }
             }
         }
         return ticket;

@@ -1,4 +1,5 @@
 import { AbstractComponent, LangItem } from "core";
+import { getReadVersionsUrl } from "./tool";
 
 @Service(Filter, 'CL-Filter')
 class Filter extends AbstractComponent<any> {
@@ -85,8 +86,7 @@ class Filter extends AbstractComponent<any> {
             return (window as any).readVersion();
         }
         if (self.versionList.length == 0) {
-            let versions = window.getConfigOrDefault('urls.versions', '', false);
-            self.versionList = JSON.parse($net.get(versions));
+            self.versionList = JSON.parse($net.get(getReadVersionsUrl()));
         }
         return self.versionList;
     })

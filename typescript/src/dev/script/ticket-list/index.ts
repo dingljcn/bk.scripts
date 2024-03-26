@@ -3,6 +3,7 @@ import { AbstractComponent, LangItem } from 'core';
 import { Ticket } from 'dev';
 import 'dev/util/ticket'
 import tifilter from './filter';
+import ticketModal from '../../util/ticket/ticket-detail-modal';
 
 const mainElement = window.byId('main');
 
@@ -25,19 +26,7 @@ if (mainElement) {
                         </div>
                     </template>
                 </i-tab-view>
-                <i-modal :i-props="modalProps">
-                    <template v-slot:title>
-                        <div>
-                            <span class="ticket-modal-id" @click="openTicketByModal()">
-                                {{ modal.ticket.get('id') }}
-                            </span>
-                            <span>{{ modal.ticket.get('summary') }}</span>
-                        </div>
-                    </template>
-                    <template v-slot:content>
-                        <h1>111</h1>
-                    </template>
-                </i-modal>
+                <ticket-modal :i-props="modalProps"></ticket-modal>
             </template>
             <template v-slot:after></template>
         </i-nav-view>
@@ -48,7 +37,7 @@ if (mainElement) {
 export class App extends AbstractComponent<any> implements TicketApp {
 
     @Component({
-        tifilter
+        tifilter, ticketModal
     })
     @Mounted public mounted(): any {
         const _this = this;
@@ -124,10 +113,6 @@ export class App extends AbstractComponent<any> implements TicketApp {
         }
     }
 
-    @Method public openTicketByModal() {
-        $ticket.openTicket(this, this.modal.ticket.get('id'));
-    }
-
     @Method public getCellValue(ticket: Ticket, col: LangItem | string): string {
         return $ticket.getCellValue<any>(this, ticket, col);
     }
@@ -148,16 +133,27 @@ export class App extends AbstractComponent<any> implements TicketApp {
         return $ticket.columnsToDisplay(this, groupName, tabName);
     }
 
-    @Compute((self: App) => {
+    @Compute((self: App): TicketDtlProps => {
         return {
-            display: self.modal.display,
-            width: 700,
-            onClose: function(): void {
+            ticketModal: self.modal,
+            app: self,
+            saveCache(notes) {
+                self.modal.ticket.set('dinglj_note', notes);
+                const id = self.modal.ticket.get('id');
+                const cache = $store.getStorage<any>('dinglj-v-ticket-cache', {});
+                if (cache && !cache[id]) {
+                    cache[id] = {};
+                }
+                cache[id]['dinglj_note'] = notes;
+                $store.setStorage('dinglj-v-ticket-cache', cache);
+                console.log(cache);
+            },
+            closeWindow(): void {
                 self.modal.display = false;
-            }
+            },
         }
     })
-    public modalProps: ModalProps;
+    public modalProps: TicketDtlProps;
 
     @Compute((self: App) => {
         let regExp = /[?&]group=([a-zA-Z0-9]+)[?&]?/;

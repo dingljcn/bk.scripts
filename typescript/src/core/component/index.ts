@@ -24,3 +24,6 @@ import "./base-component/TableX";
 import "./base-component/ProgressX";
 import "./base-component/ModalX";
 import "./base-component/ContextMenuX";
+import './base-component/FileTreeX';
+import './assemble-component/TreeView';
+import './base-component/TextAreaX';

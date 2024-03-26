@@ -1,5 +1,6 @@
 import { AbstractComponent, LangItem } from "core";
 import { Case } from "dev";
+import { getTicketUrl } from "./tool";
 
 @Service(TableMode, 'AppTable', true)
 class TableMode extends AbstractComponent<AppTableProps> {
@@ -32,7 +33,7 @@ class TableMode extends AbstractComponent<AppTableProps> {
                 list.forEach((i: HTMLElement) => {
                     const text = i.innerText.trim();
                     if (text) {
-                        i.innerHTML = `<div onclick="window.open('${ window.getConfigOrDefault('urls.ticket', '', false) }/${ text }', '#${ text }')">#${ text }</div>`;
+                        i.innerHTML = `<div onclick="window.open('${ getTicketUrl() }/${ text }', '#${ text }')">#${ text }</div>`;
                     }
                 })
             }

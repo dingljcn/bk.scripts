@@ -1,8 +1,8 @@
 declare global {
     interface ExcelOptions {
-        bookType: 'xls' | 'xlsx';
-        bookSST: boolean;
-        type: 'binary';
+        bookType?: 'xls' | 'xlsx';
+        bookSST?: boolean;
+        type: 'array' | 'binary' | 'base64';
     }
     interface WorkBook {
         SheetNames: Array<string>;
@@ -13,10 +13,18 @@ declare global {
             aoa_to_sheet(data: Array<Array<any>>): any,
         },
         write(workbook: WorkBook, options: ExcelOptions): string;
+        /** 导入 Excel 文件 */
+        readFile(data: File, options?: ExcelOptions): WorkBook;
+        read(data: any, options?: ExcelOptions): WorkBook;
     }
     interface DingljExcel {
         /** 导出 Excel 文件 */
         export(name: string, data: Array<Array<any>>): void;
+        /** 导入 Excel 文件 */
+        readFile(data: File, options?: ExcelOptions): WorkBook;
+        read(data: any, callback: Function): WorkBook;
+        resolveSheets(workBook: WorkBook): Array<Array<string>>;
+        resolveSheet(workBook: WorkBook, sheetName: string): Array<Array<string>>;
     }
     /** Excel 工具类 */
     const $excel: DingljExcel;
