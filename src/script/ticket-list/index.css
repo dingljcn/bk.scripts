@@ -147,3 +147,33 @@ body {
 .edit-ticket-note {
     flex: 1;
 }
+
+.ticket-modal-content-grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 5px;
+}
+
+.ticket-modal-content-grid-item {
+    display: flex;
+}
+
+.ticket-modal-content-grid-item div:nth-child(1) {
+    font-weight: bold;
+    padding: 0 5px;
+    color: rgb(187, 187, 187);
+}
+
+.ticket-modal-content-grid-item.active div:nth-child(1) {
+    color: black;
+}
+
+.ticket-modal-content-grid-item div:nth-child(2) {
+    flex: 1;
+    color: rgb(187, 187, 187);
+}
+
+.ticket-modal-content-grid-item.active div:nth-child(2) {
+    color: rgb(17, 134, 244);
+    font-weight: bold;
+}

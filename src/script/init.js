@@ -1,4 +1,4 @@
-import { createApp } from "../vue.js";
+import { createApp, defineEmits } from "../vue.js";
 
 window.enableExcel = function() {
     if (window.isEnableExcel) {
@@ -25,18 +25,22 @@ window.dinglj = {
 
 /** 初始化创建 Vue 的函数 */
 window.createVue = function(config, mountElement) {
-    window.app = createApp(config);
+    window.dinglj_app = createApp(config);
     for (let key of Object.keys(window.components)) {
-        window.app.component(key, window.components[key]);
+        window.dinglj_app.component(key, window.components[key]);
         window.dinglj.$registMap[key] = window.components[key];
     }
-    window.app.mount(mountElement);
+    window.dinglj_app.mount(mountElement);
+}
+
+window.defineEmits = function(list) {
+    return defineEmits(list);
 }
 
 /** 注册 Vue 组件 */
 window.registVue = function(name, component) {
-    if (window.app) {
-        window.app.component(name.toLowerCase(), component);
+    if (window.dinglj_app) {
+        window.dinglj_app.component(name.toLowerCase(), component);
         window.dinglj.$registMap[name.toLowerCase()] = component;
     } else {
         if (!window.components) {
