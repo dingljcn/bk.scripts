@@ -42,16 +42,17 @@
     transition-timing-function: var(--timing-fun);
     content: '';
     position: absolute;
-    width: 0px;
+    width: var(--percent-width);
     height: 100%;
     top: 0px;
     left: 0px;
-    background: var(--theme-color);
+    background: var(--percent-color);
     z-index: -1;
 }
 
 .dinglj-v-navigator-item.active::before {
     width: 100%;
+    background: var(--theme-color);
 }
 
 .dinglj-v-navigator-item::after {
@@ -338,4 +339,80 @@
     top: 3px;
     position: relative;
     margin-right: 5px;
+}
+
+/****************************************************************** 区域 ******************************************************************/
+
+.dinglj-v-zone-caption {
+    position: absolute;
+    top: -10px;
+    background: white;
+    padding: 0 5px;
+    color: var(--theme-color);
+    font-weight: bold;
+    left: 7px;
+    user-select: none;
+    z-index: 1;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.dinglj-v-zone-outline {
+    /* position: relative; */
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 6px;
+    padding: 7px;
+    box-sizing: border-box;
+}
+
+.dinglj-v-zone{
+    /* position: relative; */
+    margin-top: 15px;
+}
+
+.dinglj-v-zone:nth-child(1){
+    margin-top: 0;
+}
+
+.dinglj-v-zone-outline {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: 0.3s;
+    overflow: hidden;
+    line-height: 12px;
+}
+
+.dinglj-v-zone-content {
+    min-height: 0px;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.expand .dinglj-v-zone-outline {
+    grid-template-rows: 1fr;
+}
+
+.expand .dinglj-v-zone-content {
+    opacity: 1;
+}
+
+.dinglj-v-zone:not(.expand) .dinglj-v-zone-outline {
+    border: 1px solid rgba(0,0,0,0);
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+.dinglj-v-zone-icon {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-top: 4px solid transparent;
+    border-left: 6px solid var(--theme-color);
+    border-bottom: 4px solid transparent;
+    margin-right: 2px;
+    margin-left: 3px;
+    transition: 0.3s;
+}
+
+.expand .dinglj-v-zone-icon {
+    transform: rotate(90deg);
 }

@@ -21,13 +21,13 @@
     /* 内容输入框删除标志的大小 */
     --delete-icon-width: 15px;
     /* 上下外边距 */
-    --margin-tb: 0px;
+    --margin-top-bottom: 0px;
     /* 左右外边距 */
-    --margin-lr: 0px;
+    --margin-left-right: 0px;
     /* 上下内边距 */
-    --padding-tb: 0px;
+    --padding-top-bottom: 0px;
     /* 左右内边距 */
-    --padding-lr: 0px;
+    --padding-left-right: 0px;
     /* 表格标题色 */
     --title-color: #263238;
 }

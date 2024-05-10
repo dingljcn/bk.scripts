@@ -6,15 +6,14 @@
 /****************************************************************** 表单控件:输入型通用样式 ******************************************************************/
 /* input 通用的变量 */
 .dinglj-v-input {
-    --margin-tb: 0px;
+    --margin-top-bottom: 0px;
     --border: 1px;
     --height: 0px;
-    --real-height: calc(var(--height) - var(--margin-tb) * 2);
+    --real-height: calc(var(--height) - var(--margin-top-bottom) * 2);
 }
 
 /* input 通用样式, 因为有 caption, 所有上放有较多外边距*/
 .dinglj-v-input {
-    position: relative;
     display: inline-block;
     height: var(--real-height);
     margin-top: 15px;
@@ -27,12 +26,13 @@
 }
 
 /* input 的标题 */
-.dinglj-v-input::before {
-    content: attr(caption);
-    color: var(--input-caption-color);
+
+.dinglj-v-input-name {
     position: absolute;
-    left: 5px;
-    top: -13px;
+    top: -15px;
+    left: -5px;
+    padding: 0 5px;
+    color: var(--input-caption-color);
     font-weight: bold;
 }
 
@@ -45,7 +45,7 @@
     cursor: pointer;
     user-select: none;
     /* 清空按钮在内圈, 需要去掉外圈的 padding 和 border */
-    margin: calc((var(--real-height) - var(--delete-icon-width) - var(--padding-tb) * 2 - var(--border) * 2) / 2) 0;
+    margin: calc((var(--real-height) - var(--delete-icon-width) - var(--padding-top-bottom) * 2 - var(--border) * 2) / 2) 0;
     opacity: 0;
     transition: var(--transition);
 }
@@ -58,7 +58,7 @@
 .dinglj-v-input.combo input,
 .dinglj-v-input.text input {
     /* input 在内圈, 需要去掉外圈的 padding 和 border*/
-    --input-height: calc(var(--real-height) - var(--padding-tb) * 2 - var(--border) * 2);
+    --input-height: calc(var(--real-height) - var(--padding-top-bottom) * 2 - var(--border) * 2);
     height: var(--input-height);
     border: none;
     padding: 0;
@@ -77,9 +77,9 @@
 /* 按钮变量 */
 .dinglj-v-btn {
     --border: 1px;
-    --margin-lr: 1px;
-    --padding-lr: 8px;
-    --real-height: calc(var(--height) - var(--margin-tb) * 2);
+    --margin-left-right: 1px;
+    --padding-left-right: 8px;
+    --real-height: calc(var(--height) - var(--margin-top-bottom) * 2);
     --primary: var(--theme-color);
     --primary-hover: #3383ec;
     --primary-active: #004caf;
@@ -98,8 +98,8 @@
     cursor: pointer;
     user-select: none;
     transition: var(--transition);
-    margin: var(--margin-tb) var(--margin-lr);
-    padding: 0 var(--padding-lr);
+    margin: var(--margin-top-bottom) var(--margin-left-right);
+    padding: 0 var(--padding-left-right);
 }
 
 /* 主样式颜色 */
@@ -143,11 +143,11 @@
 /****************************************************************** 表单控件:Input ******************************************************************/
 
 .dinglj-v-input.text {
-    --padding-lr: 5px;
-    --padding-tb: 1px;
+    --padding-left-right: 5px;
+    --padding-top-bottom: 1px;
     width: var(--width);
     height: var(--real-height);
-    padding:  var(--padding-tb) var(--padding-lr);
+    padding:  var(--padding-top-bottom) var(--padding-left-right);
     border-radius: var(--radius);
     border: 1px solid rgba(0,0,0,0.1);
     background: white;
@@ -189,7 +189,7 @@
 .dinglj-v-switch {
     --border: 1px;
     height: var(--height);
-    padding: var(--padding-tb) 0;
+    padding: var(--padding-top-bottom) 0;
     display: inline-block;
     user-select: none;
 }
@@ -203,7 +203,7 @@
 
 .dinglj-v-switch-btn {
     /* 按钮在内圈, 需要减去外圈的 padding 和 border */
-    --btn-height: calc(var(--height) - var(--padding-tb) * 2 - var(--border) * 2);
+    --btn-height: calc(var(--height) - var(--padding-top-bottom) * 2 - var(--border) * 2);
     width: var(--width);
     height: var(--btn-height);
     border-radius: calc(var(--btn-height) / 2);
@@ -238,11 +238,11 @@
 /****************************************************************** 表单控件:Combo ******************************************************************/
 
 .dinglj-v-input.combo {
-    --padding-lr: 5px;
-    --padding-tb: 1px;
+    --padding-left-right: 5px;
+    --padding-top-bottom: 1px;
     width: var(--width);
     height: var(--real-height);
-    padding: var(--padding-tb) var(--padding-lr);
+    padding: var(--padding-top-bottom) var(--padding-left-right);
     border: var(--border) solid rgba(0,0,0,0.1);
     border-radius: var(--radius);
     background: white;
@@ -265,7 +265,7 @@
 }
 
 .dinglj-v-input.combo:hover .dinglj-v-combo-selections {
-    margin-top: 2px;
+    margin-top: 0px;
     z-index: 999;
     height: auto;
     max-height: 200px;
