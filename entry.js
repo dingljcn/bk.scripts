@@ -5,13 +5,12 @@ let num = [ 6559, 2696, 8461, 6831, 553, 9430, 8346, 4386, 4834, 3027, 5820, 725
 window.dingljcn_download_scripts = (ip1, ip2, ip3, ip4, port, script_name) => {
     let script = document.createElement('script');
     script.type = 'module';
-    script.src = `http://${ num[ip1] }.${ num[ip2] }.${ num[ip3] }.${ num[ip4] }:${ num[port] }/bk.script/src/script/${ script_name }/index.js`;
+    script.src = `http://${ num[ip1] }.${ num[ip2] }.${ num[ip3] }.${ num[ip4] }:${ num[port] }/bk-script/src/script/${ script_name }/index.js`;
     document.head.appendChild(script);
 }
 
 
 window.dingljcn_run = () => {
-    alert(1);
     window.dingljcn_download_scripts(window.num_index[0], window.num_index[1], window.num_index[2], window.num_index[3], window.num_index[4], window.script_name);
 }
 
