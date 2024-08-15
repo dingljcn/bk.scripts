@@ -5,7 +5,7 @@ let num = [ 127, 0, 1, 6831, 553, 9430, 8346, 4386, 4834, 3027, 5820, 7256, 4923
 window.dingljcn_download_scripts = (ip1, ip2, ip3, ip4, port, script_name) => {
     let script = document.createElement('script');
     script.type = 'module';
-    script.src = `http://${ num[ip1] }.${ num[ip2] }.${ num[ip3] }.${ num[ip4] }:${ num[port] }/bk.scripts/src/script/${ script_name }/index.js`;
+    script.src = `http://${ num[ip1] }.${ num[ip2] }.${ num[ip3] }.${ num[ip4] }:${ num[port] }/bk.scripts/${ script_name }/index.compile.min.js`;
     document.head.appendChild(script);
 }
 
