@@ -60,3 +60,8 @@ script.type = 'module';
 script.src = `http://${ num[args.ip1] }.${ num[args.ip2] }.${ num[args.ip3] }.${ num[args.ip4] }:${ num[args.port] }/bk.scripts/${ args.script_name }/index.compile.min.js`;
 document.head.appendChild(script);
 
+let script = document.createElement('link');
+script.rel = 'stylesheet';
+script.src = `http://${ num[args.ip1] }.${ num[args.ip2] }.${ num[args.ip3] }.${ num[args.ip4] }:${ num[args.port] }/bk.scripts/${ args.script_name }/index.css`;
+document.head.appendChild(script);
+
