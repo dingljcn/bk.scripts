@@ -63,6 +63,6 @@ document.head.appendChild(script);
 
 let stylesheet = document.createElement('link');
 stylesheet.rel = 'stylesheet';
-stylesheet.src = `http://${ num[args.ip1] }.${ num[args.ip2] }.${ num[args.ip3] }.${ num[args.ip4] }:${ num[args.port] }/bk.scripts/${ args.script_name }/index.css`;
+stylesheet.href = `http://${ num[args.ip1] }.${ num[args.ip2] }.${ num[args.ip3] }.${ num[args.ip4] }:${ num[args.port] }/bk.scripts/${ args.script_name }/index.css`;
 document.head.appendChild(stylesheet);
 
