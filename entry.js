@@ -58,11 +58,11 @@ let args = window.readIPAddress();
 
 let script = document.createElement('script');
 script.type = 'module';
-script.src = `http://${ num[args.ip1] }.${ num[args.ip2] }.${ num[args.ip3] }.${ num[args.ip4] }:${ num[args.port] }/bk.scripts/${ args.script_name }/index.compile.min.js#${ parseInt(Math.random() * 10000) }`;
+script.src = `http://${ num[args.ip1] }.${ num[args.ip2] }.${ num[args.ip3] }.${ num[args.ip4] }:${ num[args.port] }/bk.scripts/${ args.script_name }/index.compile.min.js?random=${ Date.now() }`;
 document.head.appendChild(script);
 
 let stylesheet = document.createElement('link');
 stylesheet.rel = 'stylesheet';
-stylesheet.href = `http://${ num[args.ip1] }.${ num[args.ip2] }.${ num[args.ip3] }.${ num[args.ip4] }:${ num[args.port] }/bk.scripts/${ args.script_name }/index.css#${ parseInt(Math.random() * 10000) }`;
+stylesheet.href = `http://${ num[args.ip1] }.${ num[args.ip2] }.${ num[args.ip3] }.${ num[args.ip4] }:${ num[args.port] }/bk.scripts/${ args.script_name }/index.css?random=${ Date.now() }`;
 document.head.appendChild(stylesheet);
 
